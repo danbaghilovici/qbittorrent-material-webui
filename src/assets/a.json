@@ -1,0 +1,98 @@
+{
+  "categories": {},
+  "full_update": true,
+  "rid": 1,
+  "server_state": {
+    "alltime_dl": 1286591233,
+    "alltime_ul": 813418908,
+    "average_time_queue": 4925,
+    "connection_status": "connected",
+    "dht_nodes": 360,
+    "dl_info_data": 0,
+    "dl_info_speed": 0,
+    "dl_rate_limit": 0,
+    "free_space_on_disk": 12024537088,
+    "global_ratio": "0.63",
+    "queued_io_jobs": 0,
+    "queueing": false,
+    "read_cache_hits": "38.25",
+    "read_cache_overload": "0",
+    "refresh_interval": 1500,
+    "total_buffers_size": 20643840,
+    "total_peer_connections": 1,
+    "total_queued_size": 0,
+    "total_wasted_session": 0,
+    "up_info_data": 15204352,
+    "up_info_speed": 0,
+    "up_rate_limit": 0,
+    "use_alt_speed_limits": false,
+    "write_cache_overload": "0"
+  },
+  "tags": [],
+  "torrents": {
+    "3b245504cf5f11bbdbe1201cea6a6bf45aee1bc0": {
+      "added_on": 1665926460,
+      "amount_left": 0,
+      "auto_tmm": false,
+      "availability": -1,
+      "category": "",
+      "completed": 3826831360,
+      "completion_on": 1665926470,
+      "content_path": "C:\\Users\\danba\\Downloads\\ubuntu-22.04.1-desktop-amd64.iso",
+      "dl_limit": -1,
+      "dlspeed": 0,
+      "download_path": "",
+      "downloaded": 0,
+      "downloaded_session": 0,
+      "eta": 8640000,
+      "f_l_piece_prio": false,
+      "force_start": false,
+      "infohash_v1": "3b245504cf5f11bbdbe1201cea6a6bf45aee1bc0",
+      "infohash_v2": "",
+      "last_activity": 1666418103,
+      "magnet_uri": "magnet:?xt=urn:btih:3b245504cf5f11bbdbe1201cea6a6bf45aee1bc0&dn=ubuntu-22.04.1-desktop-amd64.iso&tr=https%3a%2f%2ftorrent.ubuntu.com%2fannounce&tr=https%3a%2f%2fipv6.torrent.ubuntu.com%2fannounce",
+      "max_ratio": -1,
+      "max_seeding_time": -1,
+      "name": "ubuntu-22.04.1-desktop-amd64.iso",
+      "num_complete": 377,
+      "num_incomplete": 16,
+      "num_leechs": 1,
+      "num_seeds": 0,
+      "priority": 0,
+      "progress": 1,
+      "ratio": 0.0711120212519634,
+      "ratio_limit": -2,
+      "save_path": "C:\\Users\\danba\\Downloads",
+      "seeding_time": 345755,
+      "seeding_time_limit": -2,
+      "seen_complete": 1666417575,
+      "seq_dl": false,
+      "size": 3826831360,
+      "state": "stalledUP",
+      "super_seeding": false,
+      "tags": "",
+      "time_active": 345756,
+      "total_size": 3826831360,
+      "tracker": "https://ipv6.torrent.ubuntu.com/announce",
+      "trackers_count": 2,
+      "up_limit": -1,
+      "uploaded": 272133713,
+      "uploaded_session": 15204352,
+      "upspeed": 0
+    }
+  },
+  "trackers": {
+    "http://reactor.filelist.io/eff0e84f050ede07fa03bde79bc05294/announce": [
+      "a924316d22d9f09482df0e8d71bf9f6dbad72930"
+    ],
+    "http://reactor.flro.org/eff0e84f050ede07fa03bde79bc05294/announce": [
+      "a924316d22d9f09482df0e8d71bf9f6dbad72930"
+    ],
+    "https://ipv6.torrent.ubuntu.com/announce": [
+      "3b245504cf5f11bbdbe1201cea6a6bf45aee1bc0"
+    ],
+    "https://torrent.ubuntu.com/announce": [
+      "3b245504cf5f11bbdbe1201cea6a6bf45aee1bc0"
+    ]
+  }
+}
