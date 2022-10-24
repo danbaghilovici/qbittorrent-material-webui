@@ -1,3 +1,4 @@
+// https://indepth.dev/posts/1455/how-to-split-http-interceptors-between-multiple-backends
 import {HttpEvent, HttpHandler, HttpInterceptor, HttpRequest} from "@angular/common/http";
 import {Observable} from "rxjs";
 
