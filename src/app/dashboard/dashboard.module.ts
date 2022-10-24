@@ -9,6 +9,8 @@ import {MatButtonModule} from "@angular/material/button";
 import {LoggerModule, NgxLoggerLevel} from "ngx-logger";
 import {MatTableModule} from "@angular/material/table";
 import {MatCheckboxModule} from "@angular/material/checkbox";
+import {MatProgressBarModule} from "@angular/material/progress-bar";
+import {MatSortModule} from "@angular/material/sort";
 
 const routes: Routes = [
   {path:"", component: DashboardComponent}
@@ -18,16 +20,18 @@ const routes: Routes = [
   declarations: [
     DashboardComponent
   ],
-  imports: [
-    CommonModule,
-    HttpClientModule,
-    MatIconModule,
-    MatToolbarModule,
-    RouterModule.forChild(routes),
-    MatButtonModule,
-    LoggerModule.forRoot({level: NgxLoggerLevel.TRACE}),
-    MatTableModule,
-    MatCheckboxModule
-  ]
+    imports: [
+        CommonModule,
+        HttpClientModule,
+        MatIconModule,
+        MatToolbarModule,
+        RouterModule.forChild(routes),
+        MatButtonModule,
+        LoggerModule.forRoot({level: NgxLoggerLevel.TRACE}),
+        MatTableModule,
+        MatCheckboxModule,
+        MatProgressBarModule,
+        MatSortModule
+    ]
 })
 export class DashboardModule { }

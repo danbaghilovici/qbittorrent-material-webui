@@ -13,13 +13,9 @@ export class DashboardService {
   private stopPolling = new Subject();
   private _pooling$:Observable<object>=new Observable();
 
-  constructor(private http:HttpClient,private logger:NGXLogger ) {
-
-    this.logger.trace("constr dashboard service");
-    this.logger.info("constr dashboard service");
-    this.logger.error("constr dashboard service");
-    this.logger.debug({});
+  constructor(private readonly http:HttpClient,private readonly logger:NGXLogger ) {
     this._pooling$=this.get();
+    this.logger.trace(`${DashboardService.name } started`);
   }
 
   ngOnDestroy() {
@@ -44,8 +40,8 @@ export class DashboardService {
     return timer(0,this.interval.getValue())
       .pipe(switchMap(
         ()=>this.fetchTorrentsMainData()),
-        tap(value => this.logger.trace("data",value)),
-        retry(),
+        tap(value => this.logger.trace("data from dashboard service",value)),
+        retry(2),
         share(),
         takeUntil(this.stopPolling)
         )
