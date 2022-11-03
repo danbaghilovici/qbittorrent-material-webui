@@ -1,90 +1,49 @@
 
-<mat-toolbar>
-  <button mat-icon-button class="example-icon" aria-label="Example icon-button with menu icon">
-    <mat-icon>menu</mat-icon>
-  </button>
-  <span>My App</span>
-  <span class="example-spacer"></span>
-  <button mat-icon-button class="example-icon favorite-icon" aria-label="Example icon-button with heart icon">
-    <mat-icon>favorite</mat-icon>
-  </button>
-  <button mat-icon-button class="example-icon" aria-label="Example icon-button with share icon">
-    <mat-icon>share</mat-icon>
-  </button>
-  <span> Speed</span>
-</mat-toolbar>
 
-
-<table mat-table
-       [dataSource]="dataSource" multiTemplateDataRows
-       class="mat-elevation-z8"
-       matSort >
-
-  <ng-container matColumnDef="select">
-    <th mat-header-cell *matHeaderCellDef>
-      <mat-checkbox (change)="$event ? toggleAllRows() : null"
-                    [checked]="selection.hasValue() && isAllSelected()"
-                    [indeterminate]="selection.hasValue() && !isAllSelected()"
-                    [aria-label]="checkboxLabel()">
-      </mat-checkbox>
-    </th>
-    <td mat-cell *matCellDef="let row">
-      <mat-checkbox (click)="$event.stopPropagation()"
-                    (change)="$event ? selection.toggle(row) : null"
-                    [checked]="selection.isSelected(row)"
-                    [aria-label]="checkboxLabel(row)">
-      </mat-checkbox>
-    </td>
-  </ng-container>
-<!--  <ng-container matColumnDef="{{column}}" *ngFor="let column of columnsToDisplay">-->
-<!--    <th mat-header-cell *matHeaderCellDef> {{column}} </th>-->
-<!--    <td mat-cell *matCellDef="let element"> {{element[column]}} asdw</td>-->
-<!--  </ng-container>-->
-  <ng-container matColumnDef="id" >
-    <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by number"> id </th>
-    <td mat-cell *matCellDef="let element"> {{element.id | slice:0:5}}</td>
-  </ng-container>
-  <ng-container matColumnDef="name" >
-    <th mat-header-cell *matHeaderCellDef> name </th>
-    <td mat-cell *matCellDef="let element">  {{element.name}}</td>
-  </ng-container>
-  <ng-container matColumnDef="timeActive" >
-    <th mat-header-cell *matHeaderCellDef> time </th>
-    <td mat-cell *matCellDef="let element"> {{element.timeActive}}</td>
-  </ng-container>
-  <ng-container matColumnDef="expand">
-    <th mat-header-cell *matHeaderCellDef aria-label="row actions">&nbsp;</th>
-    <td mat-cell *matCellDef="let element">
-      <button mat-icon-button aria-label="expand row" (click)="onExpandClick($event,element)">
-        <mat-icon *ngIf="!expandedElements.has(element.id)">keyboard_arrow_down</mat-icon>
-        <mat-icon *ngIf="expandedElements.has(element.id)">keyboard_arrow_up</mat-icon>
+  <mat-toolbar color="primary">
+    <mat-toolbar-row>
+      <span>QbitTorrentViewer</span>
+      <span class="example-spacer"></span>
+      <button mat-icon-button class="example-icon" aria-label="Example icon-button with menu icon">
+        <mat-icon>menu</mat-icon>
       </button>
-    </td>
-  </ng-container>
+      <button mat-icon-button class="example-icon" aria-label="Example icon-button with menu icon">
+        <mat-icon>dark_mode</mat-icon>
+      </button>
 
-  <!-- Expanded Content Column - The detail row is made up of this one column that spans across all columns -->
-  <ng-container matColumnDef="expandedDetail">
-    <td mat-cell *matCellDef="let element" [attr.colspan]="columnsToDisplayWithExpand.length">
-      <div class="example-element-detail"
-           [@detailExpand]="expandedElements.has(element.id) ? 'expanded' : 'collapsed'">
-        <div class="example-element-diagram">
-          <div class="example-element-position"> {{element.position}} </div>
-          <div class="example-element-symbol"> {{element.symbol}} </div>
-          <div class="example-element-name"> {{element.name}} </div>
-          <div class="example-element-weight"> {{element.weight}} </div>
-        </div>
-        <mat-progress-bar mode="determinate" value="{{element.progress}}" color="accent"></mat-progress-bar>
+    </mat-toolbar-row>
 
-      </div>
-    </td>
-  </ng-container>
+    <mat-toolbar-row >
+      <span>
+        <mat-icon aria-hidden="false" aria-label="Example home icon"  inline="true">cloud_download</mat-icon>
+        {{(serverState$|async)?.getFormattedDlInfoSpeed()}}/s {{(serverState$|async)?.dlInfoLimit>0?"[ "+(serverState$|async)?.dlInfoLimit+" ]":""}}
+      </span>
+      <span class="example-spacer"></span>
+      <span>
+        <mat-icon aria-hidden="false" aria-label="Example home icon"  inline="true">cloud_upload</mat-icon>
+        {{(serverState$|async)?.getUpInfoSpeed(true)}} {{(serverState$|async)?.upInfoLimit>0?"[ "+(serverState$|async)?.upInfoSpeed+" ]":""}}
+      </span>
+      <span class="example-spacer"></span>
+      <span>
+        <mat-icon aria-hidden="false" aria-label="Example home icon"  inline="true">storage</mat-icon>
+        {{(serverState$|async)?.getFormattedFreeSpaceOnDisk()}}
+      </span>
+      <span class="example-spacer"></span>
+      <span>
+        <mat-icon aria-hidden="false" aria-label="Example home icon"  inline="true">hub</mat-icon>
+        {{(serverState$|async)?.dhtNodes}}
+      </span>
+      <span class="example-spacer"></span>
+      <span>
+        <mat-icon aria-hidden="false" aria-label="Example home icon"  inline="true">signal_wifi_4_bar</mat-icon>
+        {{(serverState$|async)?.connectionStatus}}
+      </span>
+      <span class="example-spacer"></span>
+    </mat-toolbar-row>
+  </mat-toolbar>
 
-  <tr mat-header-row *matHeaderRowDef="columnsToDisplayWithExpand"></tr>
-  <tr mat-row *matRowDef="let element; columns: columnsToDisplayWithExpand;"
-      class="example-element-row"
-      [class.example-expanded-row]="expandedElements.has(element.id)"
-      (click)="onExpandClick($event,element)">
-  </tr>
-  <tr mat-row *matRowDef="let row; columns: ['expandedDetail']" class="example-detail-row"></tr>
-<!--  <tr mat-row *matRowDef="let row; columns: displayedColumns;" (click)="selection.toggle(row)"></tr>-->
-</table>
+<p *ngFor="let x of (serverHistory|async).arr">
+  {{x+""}}
+</p>
+
+

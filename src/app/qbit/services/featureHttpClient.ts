@@ -1,13 +1,13 @@
 import {Inject, Injectable, InjectionToken} from "@angular/core";
 import {HTTP_INTERCEPTORS, HttpBackend, HttpClient, HttpInterceptor} from "@angular/common/http";
-import {InterceptingHandler} from "./interceptingHandler";
+import {InterceptingHandler} from "../models/interceptingHandler";
 
-const FEATURE_HTTP_INTERCEPTORS = new InjectionToken<HttpInterceptor[]>(
+export const FEATURE_HTTP_INTERCEPTORS = new InjectionToken<HttpInterceptor[]>(
   'An abstraction on feature HttpInterceptor[]'
 );
 
 @Injectable()
-class FeatureHttpClient extends HttpClient {
+export class FeatureHttpClient extends HttpClient {
   constructor(
     backend: HttpBackend,
     @Inject(HTTP_INTERCEPTORS) interceptors: HttpInterceptor[],

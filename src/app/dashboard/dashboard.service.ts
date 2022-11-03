@@ -1,60 +1,44 @@
 import { Injectable } from '@angular/core';
 import {HttpClient} from "@angular/common/http";
-import {BehaviorSubject, Observable, retry, share, Subject, switchMap, takeUntil, tap, timer} from "rxjs";
-import {environment} from "../../environments/environment";
 import {NGXLogger} from "ngx-logger";
+import {BehaviorSubject, Observable, of, switchMap, tap} from "rxjs";
+import {ServerState} from "../qbit/models/server-stats.model";
+import {QbitService} from "../qbit/services/qbit.service";
+import {HistoryArray} from "../qbit/models/history-array.model";
 
-@Injectable({
-  providedIn: 'root'
-})
+@Injectable()
 export class DashboardService {
 
-  private interval:BehaviorSubject<number>=new BehaviorSubject<number>(10000);
-  private stopPolling = new Subject();
-  private _pooling$:Observable<object>=new Observable();
+  private serverState$:Observable<ServerState>;
+  private serverStateHistory:BehaviorSubject<HistoryArray>=new BehaviorSubject<HistoryArray>(new HistoryArray());
 
-  constructor(private readonly http:HttpClient,private readonly logger:NGXLogger ) {
-    this._pooling$=this.get();
+
+  constructor(private readonly http:HttpClient,
+              private readonly logger:NGXLogger,
+              private readonly qbit:QbitService) {
     this.logger.trace(`${DashboardService.name } started`);
+    this.serverState$=this.qbit.fetchDataByInterval()
+      .pipe(switchMap((value)=>{
+          return of(new ServerState(value.server_state));
+        }),
+        tap(value => {
+          this.logger.trace(value);
+          const x=this.serverStateHistory.getValue();
+          x.push(value);
+          this.serverStateHistory.next(x);
+          console.log(this.serverStateHistory.getValue());
+        })
+      );
   }
 
-  ngOnDestroy() {
-    this.stopPolling.next(null);
-    this._pooling$=new Observable<JSON>();
+  public getServerState():Observable<ServerState>{
+    return this.serverState$;
   }
 
-  public getVersion():Observable<string>{
-    return this.http.get(this.getRelativeUrl("api/v2/app/version"),{responseType:"text"});
+  public getServerStateHistory():Observable<HistoryArray>{
+    return this.serverStateHistory.asObservable();
   }
 
-
-  get pooling$(): Observable<object> {
-    return this._pooling$;
-  }
-
-  public setInterval(newInterval:number):void{
-    this.interval.next(newInterval);
-  }
-
-  private get():Observable<object>{
-    return timer(0,this.interval.getValue())
-      .pipe(switchMap(
-        ()=>this.fetchTorrentsMainData()),
-        tap(value => this.logger.trace("data from dashboard service",value)),
-        retry(2),
-        share(),
-        takeUntil(this.stopPolling)
-        )
-  }
-
-  private fetchTorrentsMainData():Observable<JSON>{
-    return this.http.get<JSON>(this.getRelativeUrl("api/v2/sync/maindata"),{responseType:"json",withCredentials:true});
-  }
-
-  private getRelativeUrl(forUri:string):string{
-    return !environment.production?("http://localhost:8080/"+forUri):forUri;
-
-  }
 
 
 

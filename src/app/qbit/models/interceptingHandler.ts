@@ -10,13 +10,11 @@ export class InterceptingHandler implements HttpHandler {
   }
 
   handle(req: HttpRequest<any>): Observable<HttpEvent<any>> {
+    // console.log("handle interceptor here")
     return this.chain.handle(req);
   }
 
   private buildChain(): void {
-    this.chain = this.interceptors.reduceRight((next, interceptor) =>
-        new InterceptorHandler(next, interceptor),
-      this.backend
-    );
+    this.chain = this.interceptors.reduceRight((next, interceptor) => new InterceptorHandler(next, interceptor), this.backend);
   }
 }

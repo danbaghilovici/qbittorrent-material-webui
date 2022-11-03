@@ -1,13 +1,13 @@
 import { TestBed } from '@angular/core/testing';
 
-import { QbitService } from './qbit.service';
+import { TorrentsService } from './torrents.service';
 
-describe('QbitService', () => {
-  let service: QbitService;
+describe('TorrentsService', () => {
+  let service: TorrentsService;
 
   beforeEach(() => {
     TestBed.configureTestingModule({});
-    service = TestBed.inject(QbitService);
+    service = TestBed.inject(TorrentsService);
   });
 
   it('should be created', () => {
