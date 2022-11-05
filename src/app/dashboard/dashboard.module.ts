@@ -5,14 +5,11 @@ import {RouterModule, Routes} from "@angular/router";
 import {HttpClientModule} from "@angular/common/http";
 import {LoggerModule, NgxLoggerLevel} from "ngx-logger";
 import {QbitModule} from "../qbit/qbit.module";
+import {DashboardService} from "./dashboard.service";
 import {MatToolbarModule} from "@angular/material/toolbar";
 import {MatIconModule} from "@angular/material/icon";
-import {MatCheckboxModule} from "@angular/material/checkbox";
-import {MatTableModule} from "@angular/material/table";
-import {MatSortModule} from "@angular/material/sort";
 import {MatButtonModule} from "@angular/material/button";
-import {MatProgressBarModule} from "@angular/material/progress-bar";
-import {DashboardService} from "./dashboard.service";
+import {TorrentsModule} from "../torrents/torrents.module";
 
 const routes: Routes = [
   {path:"", component: DashboardComponent}
@@ -27,15 +24,12 @@ const routes: Routes = [
     CommonModule,
     HttpClientModule,
     RouterModule.forChild(routes),
-    LoggerModule.forRoot({level: NgxLoggerLevel.TRACE}),
+    // LoggerModule.forRoot({level: NgxLoggerLevel.TRACE}),
     QbitModule,
     MatToolbarModule,
     MatIconModule,
-    MatCheckboxModule,
-    MatTableModule,
-    MatSortModule,
     MatButtonModule,
-    MatProgressBarModule
+    TorrentsModule
   ]
 })
 export class DashboardModule { }

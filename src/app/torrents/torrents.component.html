@@ -1,3 +1,4 @@
+
 <table mat-table
        [dataSource]="dataSource" multiTemplateDataRows
        class="mat-elevation-z8"
@@ -6,37 +7,55 @@
   <ng-container matColumnDef="select">
     <th mat-header-cell *matHeaderCellDef>
       <mat-checkbox (change)="$event ? toggleAllRows() : null"
-                    [checked]="selection.hasValue() && isAllSelected()"
-                    [indeterminate]="selection.hasValue() && !isAllSelected()"
+                    [checked]="selectionHasValue() && isAllSelected()"
+                    [indeterminate]="selectionHasValue() && !isAllSelected()"
                     [aria-label]="checkboxLabel()">
       </mat-checkbox>
     </th>
     <td mat-cell *matCellDef="let row">
       <mat-checkbox (click)="$event.stopPropagation()"
-                    (change)="$event ? selection.toggle(row) : null"
-                    [checked]="selection.isSelected(row)"
+                    (change)="$event ? toggleSelectionRow(row) : null"
+                    [checked]="isRowSelected(row)"
                     [aria-label]="checkboxLabel(row)">
       </mat-checkbox>
     </td>
   </ng-container>
-  <!--  <ng-container matColumnDef="{{column}}" *ngFor="let column of columnsToDisplay">-->
-  <!--    <th mat-header-cell *matHeaderCellDef> {{column}} </th>-->
-  <!--    <td mat-cell *matCellDef="let element"> {{element[column]}} asdw</td>-->
-  <!--  </ng-container>-->
   <ng-container matColumnDef="id" >
-    <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by number"> id </th>
-    <td mat-cell *matCellDef="let element"> {{element.id | slice:0:5}}</td>
+    <th mat-header-cell *matHeaderCellDef > id </th>
+    <td mat-cell *matCellDef="let element"> {{element.id | slice:0:3}}</td>
+  </ng-container>
+  <ng-container matColumnDef="addedOn" >
+    <th mat-header-cell *matHeaderCellDef> Added on </th>
+    <td mat-cell *matCellDef="let element"> {{element.addedOn.toLocaleString()}}</td>
   </ng-container>
   <ng-container matColumnDef="name" >
-    <th mat-header-cell *matHeaderCellDef> name </th>
-    <td mat-cell *matCellDef="let element">  {{element.name}}</td>
+    <th mat-header-cell *matHeaderCellDef> Name </th>
+    <td mat-cell *matCellDef="let element"> {{element.name}}</td>
   </ng-container>
   <ng-container matColumnDef="timeActive" >
     <th mat-header-cell *matHeaderCellDef> time </th>
     <td mat-cell *matCellDef="let element"> {{element.timeActive}}</td>
   </ng-container>
+  <ng-container matColumnDef="progress" >
+    <th mat-header-cell *matHeaderCellDef> Progress </th>
+    <td mat-cell *matCellDef="let element"> {{element.progress}}%</td>
+  </ng-container>
+  <ng-container matColumnDef="tags" >
+    <th mat-header-cell *matHeaderCellDef> Tags </th>
+    <td mat-cell *matCellDef="let element">
+      <mat-chip-list aria-label="Dog selection">
+        <mat-chip *ngFor="let tag of element.tags">{{tag}}</mat-chip>
+      </mat-chip-list>
+    </td>
+  </ng-container>
+
   <ng-container matColumnDef="expand">
-    <th mat-header-cell *matHeaderCellDef aria-label="row actions">&nbsp;</th>
+    <th mat-header-cell *matHeaderCellDef aria-label="row actions">
+      <button mat-icon-button (click)="expandAllElements()">
+        <mat-icon *ngIf="!areAllExpanded()">keyboard_arrow_down</mat-icon>
+        <mat-icon *ngIf="areAllExpanded()">keyboard_arrow_up</mat-icon>
+      </button>
+    </th>
     <td mat-cell *matCellDef="let element">
       <button mat-icon-button aria-label="expand row" (click)="onExpandClick($event,element)">
         <mat-icon *ngIf="!expandedElements.has(element.id)">keyboard_arrow_down</mat-icon>
@@ -50,14 +69,52 @@
     <td mat-cell *matCellDef="let element" [attr.colspan]="columnsToDisplayWithExpand.length">
       <div class="example-element-detail"
            [@detailExpand]="expandedElements.has(element.id) ? 'expanded' : 'collapsed'">
-        <div class="example-element-diagram">
-          <div class="example-element-position"> {{element.position}} </div>
-          <div class="example-element-symbol"> {{element.symbol}} </div>
-          <div class="example-element-name"> {{element.name}} </div>
-          <div class="example-element-weight"> {{element.weight}} </div>
-        </div>
-        <mat-progress-bar mode="determinate" value="{{element.progress}}" color="accent"></mat-progress-bar>
+        <mat-grid-list cols="2" rowHeight="2:1" >
+          <mat-grid-tile  >
+            <div class="">
+              <mat-list role="list">
+                <mat-list-item role="listitem" *ngIf="element.tracker">
+                  Tracker : <a href="{{element.tracker}}">{{element.tracker | shortDomain}}</a>
+                  <button mat-icon-button aria-label="Copy to clipboard">
+                    <mat-icon >content_copy</mat-icon>
+                  </button>
 
+                </mat-list-item>
+                <mat-list-item role="listitem" *ngIf="element.infoHashV1">
+                  Info Hash: {{element.infoHashV1 | slice:0:3}}
+                  <button mat-icon-button aria-label="Copy to clipboard">
+                    <mat-icon >content_copy</mat-icon>
+                  </button>
+                </mat-list-item>
+                <mat-list-item role="listitem" *ngIf="element.infoHashV2">
+                  Info Hash (V2): {{element.infoHashV2 | slice:0:3}}
+                  <button mat-icon-button aria-label="Copy to clipboard">
+                    <mat-icon >content_copy</mat-icon>
+                  </button>
+                </mat-list-item>
+                <mat-list-item role="listitem" *ngIf="element.magnetUri">
+                  Magnet URI: <a href="{{element.magnetUri}}">{{element.magnetUri | slice:11:20}}</a>
+                  <button mat-icon-button aria-label="Copy to clipboard">
+                    <mat-icon >content_copy</mat-icon>
+                  </button>
+                </mat-list-item>
+              </mat-list>
+
+            </div>
+          </mat-grid-tile>
+          <mat-grid-tile>
+            <ngx-charts-line-chart
+              [view]="view"
+              [showXAxisLabel]="true"
+              [showYAxisLabel]="true"
+              [xAxis]="true"
+              [yAxis]="true"
+              [timeline]="true"
+              [results]="multi"
+            >
+            </ngx-charts-line-chart>
+          </mat-grid-tile>
+        </mat-grid-list>
       </div>
     </td>
   </ng-container>

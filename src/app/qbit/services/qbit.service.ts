@@ -3,7 +3,7 @@ import {Observable, of, retry, share, Subject, switchMap, takeUntil, tap, throwE
 import {FeatureHttpClient} from "./featureHttpClient";
 import {NGXLogger} from "ngx-logger";
 import {HttpResponse} from "@angular/common/http";
-import {IServerStats} from "../models/server-stats.model";
+import {IServerStats, ServerStats} from "../models/server-stats.model";
 
 @Injectable()
 export class QbitService {
@@ -29,21 +29,25 @@ export class QbitService {
       }));
   }
 
-  public fetchTorrentsMainData():Observable<IServerStats>{
+  public fetchTorrentsMainData():Observable<ServerStats>{
     return this.http.get<string>(this.QBIT_MAIN_DATA_ENDPOINT,{observe:"response"})
       .pipe(switchMap((response=>{
         if (this.isResponseValid(response)){
-          console.time();
+          // console.time();
           const json:IServerStats=JSON.parse(<string>response?.body);
           // const x:ServerStats=new ServerStats(json)
-          console.timeEnd();
+          // console.timeEnd();
           return of(json);
         }
         return throwError(new Error("Request failed"));
-      })));
+      })),
+        tap(data=>{this.logger.trace(data)}),
+        switchMap((data:IServerStats)=>{
+        return of(new ServerStats(data))
+      }));
   }
 
-  public fetchDataByInterval(interval:number=1000):Observable<IServerStats>{
+  public fetchDataByInterval(interval:number=1000):Observable<ServerStats>{
     return timer(0,interval)
       .pipe(switchMap(
           ()=>this.fetchTorrentsMainData()),
@@ -62,7 +66,7 @@ export class QbitService {
 
 
   private isResponseValid(response:HttpResponse<any>):boolean{
-    this.logger.trace("response is",response);
+    // this.logger.trace("response is",response);
     return response.ok && response.status/100===2;
   }
 
