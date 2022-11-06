@@ -103,16 +103,20 @@
             </div>
           </mat-grid-tile>
           <mat-grid-tile>
-            <ngx-charts-line-chart
-              [view]="view"
-              [showXAxisLabel]="true"
-              [showYAxisLabel]="true"
-              [xAxis]="true"
-              [yAxis]="true"
-              [timeline]="true"
-              [results]="multi"
-            >
-            </ngx-charts-line-chart>
+            <div style="height: 100%;width: 100%;">
+              <ngx-charts-line-chart ngx-charts-pie-chart
+
+                                     [showXAxisLabel]="true"
+                                     [showYAxisLabel]="true"
+                                     [xAxis]="true"
+                                     [yAxis]="true"
+                                     [animations]="false"
+                                     [timeline]="true"
+                                     [results]="multi"
+              >
+              </ngx-charts-line-chart>
+            </div>
+
           </mat-grid-tile>
         </mat-grid-list>
       </div>

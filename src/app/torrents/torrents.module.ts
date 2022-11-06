@@ -14,13 +14,14 @@ import {MatGridListModule} from "@angular/material/grid-list";
 import {MatListModule} from "@angular/material/list";
 import {ShortDomainPipe} from "./short-domain.pipe";
 import {NgxChartsModule} from "@swimlane/ngx-charts";
+import {NgxLineChartZeroMarginDirective} from "./chart.directive";
 
 
 
 
 @NgModule({
   declarations: [
-    TorrentsComponent,ShortDomainPipe
+    TorrentsComponent,ShortDomainPipe,NgxLineChartZeroMarginDirective
   ],
   providers:[TorrentsService],
   imports: [

@@ -1,10 +1,12 @@
-
-
+<div
+  class="example-container"
+  [class.example-is-mobile]="mobileQuery.matches"
+>
   <mat-toolbar color="primary">
     <mat-toolbar-row>
       <span>QbitTorrentViewer</span>
       <span class="example-spacer"></span>
-      <button mat-icon-button class="example-icon" aria-label="Example icon-button with menu icon">
+      <button mat-icon-button (click)="snav.toggle()" class="example-icon" aria-label="Example icon-button with menu icon">
         <mat-icon>menu</mat-icon>
       </button>
       <button mat-icon-button class="example-icon" aria-label="Example icon-button with menu icon">
@@ -41,5 +43,31 @@
       <span class="example-spacer"></span>
     </mat-toolbar-row>
   </mat-toolbar>
-<app-torrents ></app-torrents>
+
+  <mat-sidenav-container
+    class="example-sidenav-container"
+    [style.marginTop.px]="mobileQuery.matches ? 56 : 0"
+  >
+    <mat-sidenav
+      #snav
+      mode="over"
+      [fixedInViewport]="mobileQuery.matches"
+      fixedTopGap="56"
+    >
+      <mat-nav-list>
+        <a mat-list-item routerLink="." *ngFor="let nav of fillerNav"
+        >{{nav}}</a
+        >
+      </mat-nav-list>
+    </mat-sidenav>
+
+    <mat-sidenav-content>
+      <span class="md-accent">Big test with <a href="#" >AAAAAAAAAAAAAAAA</a></span>
+      <app-torrents ></app-torrents>
+    </mat-sidenav-content>
+  </mat-sidenav-container>
+</div>
+
+
+
 

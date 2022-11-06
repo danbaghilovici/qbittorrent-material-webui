@@ -10,6 +10,8 @@ import {MatToolbarModule} from "@angular/material/toolbar";
 import {MatIconModule} from "@angular/material/icon";
 import {MatButtonModule} from "@angular/material/button";
 import {TorrentsModule} from "../torrents/torrents.module";
+import {MatSidenavModule} from "@angular/material/sidenav";
+import {MatListModule} from "@angular/material/list";
 
 const routes: Routes = [
   {path:"", component: DashboardComponent}
@@ -29,7 +31,9 @@ const routes: Routes = [
     MatToolbarModule,
     MatIconModule,
     MatButtonModule,
-    TorrentsModule
+    TorrentsModule,
+    MatSidenavModule,
+    MatListModule
   ]
 })
 export class DashboardModule { }

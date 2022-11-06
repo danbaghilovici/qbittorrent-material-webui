@@ -23,7 +23,7 @@ export class TorrentsComponent implements OnInit {
   // public torrents:BehaviorSubject<TorrentData[]>=new BehaviorSubject<TorrentData[]>([])
   public tableTorrents:{id:string,name:string,time:number}[]=[];
   public torrents$:Observable<Map<string,TorrentData>>;
-  public view: any = [700, 300];
+  public view: any = [200];
   // options
   legend: boolean = true;
   showLabels: boolean = true;

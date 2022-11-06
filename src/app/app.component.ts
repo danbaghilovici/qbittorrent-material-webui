@@ -7,4 +7,10 @@ import { Component } from '@angular/core';
 })
 export class AppComponent {
   title = 'qbittorrent-material-webui';
+  dark=false;
+
+  public toggle(){
+    this.dark=!this.dark;
+    console.log("changed to ",this.dark);
+  }
 }

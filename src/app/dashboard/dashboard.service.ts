@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import {HttpClient} from "@angular/common/http";
 import {NGXLogger} from "ngx-logger";
-import {BehaviorSubject, Observable, of, switchMap, tap} from "rxjs";
+import {BehaviorSubject, Observable, of, switchMap, take, tap} from "rxjs";
 import {QbitService} from "../qbit/services/qbit.service";
 import {HistoryArray} from "../qbit/models/history-array.model";
 import {ServerState} from "../qbit/models/server-state.model";
@@ -25,7 +25,8 @@ export class DashboardService {
           const x=this.serverStateHistory.getValue();
           x.push(value);
           this.serverStateHistory.next(x);
-        })
+        }),
+        take(1)
       );
   }
 
