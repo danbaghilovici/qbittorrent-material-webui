@@ -13,17 +13,17 @@ import {MatChipsModule} from "@angular/material/chips";
 import {MatGridListModule} from "@angular/material/grid-list";
 import {MatListModule} from "@angular/material/list";
 import {ShortDomainPipe} from "./short-domain.pipe";
-import {NgxChartsModule} from "@swimlane/ngx-charts";
-import {NgxLineChartZeroMarginDirective} from "./chart.directive";
+import {NgChartsConfiguration, NgChartsModule} from "ng2-charts";
+import {MatRippleModule} from "@angular/material/core";
 
 
 
 
 @NgModule({
   declarations: [
-    TorrentsComponent,ShortDomainPipe,NgxLineChartZeroMarginDirective
+    TorrentsComponent,ShortDomainPipe
   ],
-  providers:[TorrentsService],
+  providers:[TorrentsService,{provide:NgChartsConfiguration,useValue:{}}],
   imports: [
     CommonModule,
     MatTableModule,
@@ -36,7 +36,8 @@ import {NgxLineChartZeroMarginDirective} from "./chart.directive";
     MatChipsModule,
     MatGridListModule,
     MatListModule,
-    NgxChartsModule
+    NgChartsModule,
+    MatRippleModule
   ],
   exports:[TorrentsComponent]
 })

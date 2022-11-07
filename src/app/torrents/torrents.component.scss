@@ -8,46 +8,26 @@ table {
 tr.example-detail-row {
   height: 0;
 }
-
-tr.example-element-row:not(.example-expanded-row):hover {
-  background: whitesmoke;
-}
-
-tr.example-element-row:not(.example-expanded-row):active {
-  background: #efefef;
-}
+//
+//tr.example-element-row:not(.example-expanded-row):hover {
+//  background: whitesmoke;
+//}
+//
+//tr.example-element-row:not(.example-expanded-row):active {
+//  background: #efefef;
+//}
 
 .example-element-row td {
   border-bottom-width: 0;
 }
 .example-element-detail {
   overflow: hidden;
-  //display: flex;
+  display: flex;
+  justify-content: flex-start;
+  align-items: flex-start;
 }
 
-.example-element-diagram {
-  //min-width: 80px;
-  border: 2px solid black;
-  padding: 8px;
-  font-weight: lighter;
-  margin: 8px 0;
-  width: 100%;
-  height: 100px;
-}
 
-.example-element-symbol {
-  font-weight: bold;
-  font-size: 40px;
-  line-height: normal;
-}
-
-.example-element-description {
-  padding: 16px;
-}
-
-.example-element-description-attribution {
-  opacity: 0.5;
-}
 
 mat-toolbar-row span mat-icon{
   vertical-align: bottom;
@@ -56,3 +36,15 @@ mat-toolbar-row span mat-icon{
 g.ng-star-inserted{
   color:white;
 }
+
+div.mat-grid-tile-content{
+  justify-content: flex-start!important;
+  align-items: flex-start!important;
+}
+
+.mat-row .mat-cell {
+  //border-bottom: 1px solid transparent;
+  //border-top: 1px solid transparent;
+  cursor: pointer;
+}
+

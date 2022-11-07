@@ -69,66 +69,24 @@
     <td mat-cell *matCellDef="let element" [attr.colspan]="columnsToDisplayWithExpand.length">
       <div class="example-element-detail"
            [@detailExpand]="expandedElements.has(element.id) ? 'expanded' : 'collapsed'">
-        <mat-grid-list cols="2" rowHeight="2:1" >
-          <mat-grid-tile  >
-            <div class="">
-              <mat-list role="list">
-                <mat-list-item role="listitem" *ngIf="element.tracker">
-                  Tracker : <a href="{{element.tracker}}">{{element.tracker | shortDomain}}</a>
-                  <button mat-icon-button aria-label="Copy to clipboard">
-                    <mat-icon >content_copy</mat-icon>
-                  </button>
+        <div style="display: block;">
+          <canvas baseChart width="400" height="400"
+                  [data]="lineChartData"
+                  [options]="lineChartOptions"
+                  [type]="lineChartType"
+                  ></canvas>
+        </div>
 
-                </mat-list-item>
-                <mat-list-item role="listitem" *ngIf="element.infoHashV1">
-                  Info Hash: {{element.infoHashV1 | slice:0:3}}
-                  <button mat-icon-button aria-label="Copy to clipboard">
-                    <mat-icon >content_copy</mat-icon>
-                  </button>
-                </mat-list-item>
-                <mat-list-item role="listitem" *ngIf="element.infoHashV2">
-                  Info Hash (V2): {{element.infoHashV2 | slice:0:3}}
-                  <button mat-icon-button aria-label="Copy to clipboard">
-                    <mat-icon >content_copy</mat-icon>
-                  </button>
-                </mat-list-item>
-                <mat-list-item role="listitem" *ngIf="element.magnetUri">
-                  Magnet URI: <a href="{{element.magnetUri}}">{{element.magnetUri | slice:11:20}}</a>
-                  <button mat-icon-button aria-label="Copy to clipboard">
-                    <mat-icon >content_copy</mat-icon>
-                  </button>
-                </mat-list-item>
-              </mat-list>
-
-            </div>
-          </mat-grid-tile>
-          <mat-grid-tile>
-            <div style="height: 100%;width: 100%;">
-              <ngx-charts-line-chart ngx-charts-pie-chart
-
-                                     [showXAxisLabel]="true"
-                                     [showYAxisLabel]="true"
-                                     [xAxis]="true"
-                                     [yAxis]="true"
-                                     [animations]="false"
-                                     [timeline]="true"
-                                     [results]="multi"
-              >
-              </ngx-charts-line-chart>
-            </div>
-
-          </mat-grid-tile>
-        </mat-grid-list>
       </div>
     </td>
   </ng-container>
 
-  <tr mat-header-row *matHeaderRowDef="columnsToDisplayWithExpand"></tr>
-  <tr mat-row *matRowDef="let element; columns: columnsToDisplayWithExpand;"
+  <tr mat-header-row  *matHeaderRowDef="columnsToDisplayWithExpand"></tr>
+  <tr mat-row  *matRowDef="let element; columns: columnsToDisplayWithExpand;"
       class="example-element-row"
       [class.example-expanded-row]="expandedElements.has(element.id)"
       (click)="onExpandClick($event,element)">
   </tr>
-  <tr mat-row *matRowDef="let row; columns: ['expandedDetail']" class="example-detail-row"></tr>
+  <tr mat-row   *matRowDef="let row; columns: ['expandedDetail']" class="example-detail-row"></tr>
   <!--  <tr mat-row *matRowDef="let row; columns: displayedColumns;" (click)="selection.toggle(row)"></tr>-->
 </table>

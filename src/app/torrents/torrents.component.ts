@@ -1,11 +1,13 @@
 import {Component, OnInit} from '@angular/core';
 import { Observable, tap} from "rxjs";
-import {SelectionModel} from "@angular/cdk/collections";
+import { Chart, ChartConfiguration, ChartEvent, ChartType } from 'chart.js';
 import {MatTableDataSource} from "@angular/material/table";
 import {TorrentsService} from "./torrents.service";
 import {NGXLogger} from "ngx-logger";
 import {TorrentData} from "../qbit/models/torrent-data.model";
 import {animate, state, style, transition, trigger} from "@angular/animations";
+import {default as Annotation} from "chartjs-plugin-annotation";
+
 
 @Component({
   selector: 'app-torrents',
@@ -23,18 +25,7 @@ export class TorrentsComponent implements OnInit {
   // public torrents:BehaviorSubject<TorrentData[]>=new BehaviorSubject<TorrentData[]>([])
   public tableTorrents:{id:string,name:string,time:number}[]=[];
   public torrents$:Observable<Map<string,TorrentData>>;
-  public view: any = [200];
-  // options
-  legend: boolean = true;
-  showLabels: boolean = true;
-  animations: boolean = true;
-  xAxis: boolean = true;
-  yAxis: boolean = true;
-  showYAxisLabel: boolean = true;
-  showXAxisLabel: boolean = true;
-  xAxisLabel: string = 'Year';
-  yAxisLabel: string = 'Population';
-  timeline: boolean = true;
+
   columnsToDisplay = [
     'select',
     'id',
@@ -49,80 +40,82 @@ export class TorrentsComponent implements OnInit {
   expandedElements: Set<string>;
   private selection:Set<string>;
   dataSource = new MatTableDataSource<TorrentData>([]);
-  public multi:any=[
-    {
-      "name": "Germany",
-      "series": [
+  public lineChartData: ChartConfiguration['data'] = {
+    datasets: [
+      {
+        data: [ 65, 59, 80, 81, 56, 55, 40 ],
+        label: 'Series A',
+        backgroundColor: 'rgba(148,159,177,0.2)',
+        borderColor: 'rgba(148,159,177,1)',
+        pointBackgroundColor: 'rgba(148,159,177,1)',
+        pointBorderColor: '#fff',
+        pointHoverBackgroundColor: '#fff',
+        pointHoverBorderColor: 'rgba(148,159,177,0.8)',
+        fill: 'origin',
+      },
+      {
+        data: [ 28, 48, 40, 19, 86, 27, 90 ],
+        label: 'Series B',
+        backgroundColor: 'rgba(77,83,96,0.2)',
+        borderColor: 'rgba(77,83,96,1)',
+        pointBackgroundColor: 'rgba(77,83,96,1)',
+        pointBorderColor: '#fff',
+        pointHoverBackgroundColor: '#fff',
+        pointHoverBorderColor: 'rgba(77,83,96,1)',
+        fill: 'origin',
+      },
+      {
+        data: [ 180, 480, 770, 90, 1000, 270, 400 ],
+        label: 'Series C',
+        yAxisID: 'y-axis-1',
+        backgroundColor: 'rgba(255,0,0,0.3)',
+        borderColor: 'red',
+        pointBackgroundColor: 'rgba(148,159,177,1)',
+        pointBorderColor: '#fff',
+        pointHoverBackgroundColor: '#fff',
+        pointHoverBorderColor: 'rgba(148,159,177,0.8)',
+        fill: 'origin',
+      }
+    ],
+    labels: [ 'January', 'February', 'March', 'April', 'May', 'June', 'July' ]
+  };
+
+  public lineChartOptions: ChartConfiguration['options'] = {
+    elements: {
+      line: {
+        tension: 0.5
+      }
+    },
+    scales: {
+      // We use this empty structure as a placeholder for dynamic theming.
+      x: {},
+      'y-axis-0':
         {
-          "name": "1990",
-          "value": 62000000
+          position: 'left',
         },
-        {
-          "name": "2010",
-          "value": 73000000
+      'y-axis-1': {
+        position: 'right',
+        grid: {
+          color: 'rgba(255,0,0,0.3)',
         },
-        {
-          "name": "2011",
-          "value": 89400000
+        ticks: {
+          color: 'red'
         }
-      ]
+      }
     },
 
-    {
-      "name": "USA",
-      "series": [
-        {
-          "name": "1990",
-          "value": 250000000
-        },
-        {
-          "name": "2010",
-          "value": 309000000
-        },
-        {
-          "name": "2011",
-          "value": 311000000
-        }
-      ]
-    },
-
-    {
-      "name": "France",
-      "series": [
-        {
-          "name": "1990",
-          "value": 58000000
-        },
-        {
-          "name": "2010",
-          "value": 50000020
-        },
-        {
-          "name": "2011",
-          "value": 58000000
-        }
-      ]
-    },
-    {
-      "name": "UK",
-      "series": [
-        {
-          "name": "1990",
-          "value": 57000000
-        },
-        {
-          "name": "2010",
-          "value": 62000000
-        }
-      ]
+    plugins: {
+      legend: { display: true }
     }
-  ];
+  };
 
+  public lineChartType: ChartType = 'line';
 
   constructor(private readonly torrentsService:TorrentsService,
               private readonly logger:NGXLogger) {
     this.expandedElements=new Set<string>();
     this.selection = new Set<string>();
+    Chart.register(Annotation)
   }
 
   ngOnInit(): void {
