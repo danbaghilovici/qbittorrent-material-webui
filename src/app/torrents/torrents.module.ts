@@ -13,8 +13,8 @@ import {MatChipsModule} from "@angular/material/chips";
 import {MatGridListModule} from "@angular/material/grid-list";
 import {MatListModule} from "@angular/material/list";
 import {ShortDomainPipe} from "./short-domain.pipe";
-import {NgChartsConfiguration, NgChartsModule} from "ng2-charts";
 import {MatRippleModule} from "@angular/material/core";
+import {TorrentChartModule} from "./torrent-chart/torrent-chart.module";
 
 
 
@@ -23,7 +23,7 @@ import {MatRippleModule} from "@angular/material/core";
   declarations: [
     TorrentsComponent,ShortDomainPipe
   ],
-  providers:[TorrentsService,{provide:NgChartsConfiguration,useValue:{}}],
+  providers:[TorrentsService],
   imports: [
     CommonModule,
     MatTableModule,
@@ -36,8 +36,8 @@ import {MatRippleModule} from "@angular/material/core";
     MatChipsModule,
     MatGridListModule,
     MatListModule,
-    NgChartsModule,
-    MatRippleModule
+    MatRippleModule,
+    TorrentChartModule
   ],
   exports:[TorrentsComponent]
 })

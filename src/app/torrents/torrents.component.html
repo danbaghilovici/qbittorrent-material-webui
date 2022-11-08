@@ -69,14 +69,12 @@
     <td mat-cell *matCellDef="let element" [attr.colspan]="columnsToDisplayWithExpand.length">
       <div class="example-element-detail"
            [@detailExpand]="expandedElements.has(element.id) ? 'expanded' : 'collapsed'">
-        <div style="display: block;">
-          <canvas baseChart width="400" height="400"
-                  [data]="lineChartData"
-                  [options]="lineChartOptions"
-                  [type]="lineChartType"
-                  ></canvas>
-        </div>
-
+        <mat-grid-list cols="2" rowHeight="2:1">
+          <mat-grid-tile>
+            <app-torrent-chart></app-torrent-chart>
+          </mat-grid-tile>
+          <mat-grid-tile>2</mat-grid-tile>
+        </mat-grid-list>
       </div>
     </td>
   </ng-container>

@@ -22,9 +22,12 @@ tr.example-detail-row {
 }
 .example-element-detail {
   overflow: hidden;
-  display: flex;
-  justify-content: flex-start;
-  align-items: flex-start;
+  //display: flex;
+  //justify-content: flex-start;
+  //align-items: flex-start;
+  //> * {
+  //  flex:1;
+  //}
 }
 
 
@@ -33,14 +36,7 @@ mat-toolbar-row span mat-icon{
   vertical-align: bottom;
 }
 
-g.ng-star-inserted{
-  color:white;
-}
 
-div.mat-grid-tile-content{
-  justify-content: flex-start!important;
-  align-items: flex-start!important;
-}
 
 .mat-row .mat-cell {
   //border-bottom: 1px solid transparent;
