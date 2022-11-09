@@ -1,7 +1,7 @@
 import {HistoryArray} from "./history-array.model";
 
 
-export interface TorrentHistory {
+export interface ITorrentHistory {
   date: number;
   upSpeed: number;
   dlSpeed: number;
@@ -110,12 +110,12 @@ export class TorrentData {
   private readonly _uploadedSession: number;
   private readonly _upSpeed: number
 
-  private readonly _history: HistoryArray;
+  private readonly _history: ITorrentHistory[];
 
   constructor(id: string, json: ITorrentData, from: TorrentData = null) {
     this._id = from != null ? from._id : id;
     // @ts-ignore
-    this._addedOn = new Date((from != null ? from._addedOn : json.added_on)*1000);
+    this._addedOn = new Date((from != null ? from._addedOn : json.added_on) * 1000);
     this._amountLeft = from != null ? from._amountLeft : json.amount_left;
     this._autoTmm = from != null ? from._autoTmm : json.auto_tmm;
     this._availability = from != null ? from._availability : json.availability;
@@ -126,18 +126,29 @@ export class TorrentData {
     this._infoHashV1 = from != null ? from._infoHashV1 : json.infohash_v1;
     this._infoHashV2 = from != null ? from._infoHashV2 : json.infohash_v2;
     this._magnetUri = from != null ? from._magnetUri : json.magnet_uri;
-    this._tags=this.generateTags((from != null ? from._tags: json.tags)+"");
+    this._upSpeed = from != null ? from._upSpeed : json.upspeed;
+    this._dlSpeed = from != null ? from._dlSpeed : json.dlspeed;
+    this._tags = this.generateTags((from != null ? from._tags : json.tags) + "");
+    const k: ITorrentHistory = {date: Date.now(), upSpeed: this._upSpeed, dlSpeed: this._dlSpeed};
     if (from != null) {
       this._history = from._history;
-      this._history.push({date: new Date()});
     } else {
-      this._history = new HistoryArray();
+      this._history = [];
     }
+    this.insertIntoHistory(k,from);
 
   }
 
-  private generateTags(value:string):string[]{
-    if (value.length===0){
+  private insertIntoHistory(data: ITorrentHistory,from:any): void {
+    if (this._history.length >= 10) {
+      this._history.shift();
+    }
+    this._history.push(data);
+    console.log("last data pushed "+JSON.stringify(data)+";; "+JSON.stringify(this._history)+";; "+from);
+  }
+
+  private generateTags(value: string): string[] {
+    if (value.length === 0) {
       return [];
     }
     return value.split(",");
@@ -218,11 +229,11 @@ export class TorrentData {
   }
 
   get infoHashV1(): string {
-    return this._infoHashV1.length===0?null:this._infoHashV1;
+    return this._infoHashV1.length === 0 ? null : this._infoHashV1;
   }
 
   get infoHashV2(): string {
-    return this._infoHashV2.length===0?null:this._infoHashV2;
+    return this._infoHashV2.length === 0 ? null : this._infoHashV2;
   }
 
   get lastActivity(): number {
@@ -266,7 +277,7 @@ export class TorrentData {
   }
 
   get progress(): number {
-    return (+this._progress.toPrecision(2))*100;
+    return (+this._progress.toPrecision(2)) * 100;
   }
 
   get ratio(): number {
@@ -322,7 +333,7 @@ export class TorrentData {
   }
 
   get tracker(): string {
-    return this._tracker.length===0?null:this._tracker;
+    return this._tracker.length === 0 ? null : this._tracker;
   }
 
   get trackersCount(): number {
@@ -345,7 +356,7 @@ export class TorrentData {
     return this._upSpeed;
   }
 
-  get history(): HistoryArray {
+  get history(): ITorrentHistory[] {
     return this._history;
   }
 }

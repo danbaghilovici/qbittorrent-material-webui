@@ -1,8 +1,10 @@
-import {ChangeDetectorRef, Component, OnInit, ViewChild} from '@angular/core';
+import {ChangeDetectorRef, Component, Input, OnInit, ViewChild} from '@angular/core';
 import {Chart, ChartConfiguration, ChartType} from "chart.js";
 import {default as Annotation} from "chartjs-plugin-annotation";
 import {BaseChartDirective} from "ng2-charts";
 import {MediaMatcher} from "@angular/cdk/layout";
+import {ITorrentHistory} from "../../qbit/models/torrent-data.model";
+import {Observable} from "rxjs";
 
 @Component({
   selector: 'app-torrent-chart',
@@ -10,6 +12,7 @@ import {MediaMatcher} from "@angular/cdk/layout";
   styleUrls: ['./torrent-chart.component.scss']
 })
 export class TorrentChartComponent implements OnInit {
+  @Input() torrentHistory:Observable<ITorrentHistory[]>;
   @ViewChild(BaseChartDirective) chart?: BaseChartDirective;
   public mobileQuery: MediaQueryList;
   private _mobileQueryListener: () => void;
@@ -26,41 +29,7 @@ export class TorrentChartComponent implements OnInit {
         pointHoverBackgroundColor: '#fff',
         pointHoverBorderColor: 'rgba(148,159,177,0.8)',
         fill: 'origin',
-      },
-      {
-        data: [ 28, 48, 40, 19, 86, 27, 90 ],
-        label: "Download Speed",
-        backgroundColor: 'rgba(77,83,96,0.2)',
-        borderColor: 'rgba(77,83,96,1)',
-        pointBackgroundColor: 'rgba(77,83,96,1)',
-        pointBorderColor: '#fff',
-        pointHoverBackgroundColor: '#fff',
-        pointHoverBorderColor: 'rgba(77,83,96,1)',
-        fill: 'origin',
-      },
-      {
-        data: [ 50, 50, 50, 50, 50, 50, 50 ],
-        label: 'Upload Speed Limit',
-        yAxisID: 'y-axis-1',
-        backgroundColor: 'rgba(255,0,0,0.3)',
-        borderColor: 'red',
-        pointBackgroundColor: 'rgba(148,159,177,1)',
-        pointBorderColor: '#fff',
-        pointHoverBackgroundColor: '#fff',
-        pointHoverBorderColor: 'rgba(148,159,177,0.8)',
-        fill: 'origin',
-      },
-      {
-        data: [ 100, 100, 100, 100, 100, 100, 100 ],
-        label: "Download Speed Limit",
-        backgroundColor: 'rgba(148,159,177,0.2)',
-        borderColor: 'rgba(148,159,177,1)',
-        pointBackgroundColor: 'rgba(148,159,177,1)',
-        pointBorderColor: '#f22',
-        pointHoverBackgroundColor: '#fff',
-        pointHoverBorderColor: 'rgba(148,159,177,0.8)',
-        fill: 'origin',
-      },
+      }
     ],
     labels: [ '20:01:32', 'February', 'March', 'April', 'May', 'June', 'July' ]
   };
@@ -103,10 +72,10 @@ export class TorrentChartComponent implements OnInit {
     this._mobileQueryListener = () => {
       changeDetectorRef.detectChanges();
       console.log("changed",this.chart);
-      if (this.chart){
-        // todo check this
-        this.chart.render();
-      }
+      // if (this.chart){
+      //   // todo check this
+      //   this.chart.render();
+      // }
     };
     this.mobileQuery.addListener(this._mobileQueryListener);
     Chart.register(Annotation);
@@ -114,6 +83,25 @@ export class TorrentChartComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.torrentHistory.subscribe((data)=>{
+      console.log(data);
+      const dlSpeed:number[]=[];
+      const labels:string[]=[];
+      data.forEach(value => {
+        dlSpeed.push(value.dlSpeed);
+        labels.push(value.date+"");
+      });
+      console.log(labels);
+      this.lineChartData.datasets[0].data=dlSpeed;
+      this.lineChartData.labels=labels;
+      this.updateChart();
+    })
+  }
+
+  private updateChart():void{
+    if (this.chart){
+      this.chart.update();
+    }
   }
 
 

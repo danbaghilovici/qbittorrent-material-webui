@@ -1,9 +1,9 @@
 import {Component, OnInit} from '@angular/core';
-import { Observable, tap} from "rxjs";
+import {Observable, of, switchMap, tap} from "rxjs";
 import {MatTableDataSource} from "@angular/material/table";
 import {TorrentsService} from "./torrents.service";
 import {NGXLogger} from "ngx-logger";
-import {TorrentData} from "../qbit/models/torrent-data.model";
+import {ITorrentHistory, TorrentData} from "../qbit/models/torrent-data.model";
 import {animate, state, style, transition, trigger} from "@angular/animations";
 
 
@@ -64,6 +64,14 @@ export class TorrentsComponent implements OnInit {
 
     });
 
+  }
+
+  public getTorrentHistoryById(id:string):Observable<ITorrentHistory[]>{
+    return this.torrents$.pipe(
+      switchMap((data)=>{
+        return of(data.get(id).history);
+      })
+    );
   }
 
   onExpandClick($event:Event,element:TorrentData){

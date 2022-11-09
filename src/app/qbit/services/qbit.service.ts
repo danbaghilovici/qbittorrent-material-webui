@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import {Observable, of, retry, share, Subject, switchMap, takeUntil, tap, throwError, timer} from "rxjs";
+import {Observable, of, retry, share, Subject, switchMap, take, takeUntil, tap, throwError, timer} from "rxjs";
 import {FeatureHttpClient} from "./featureHttpClient";
 import {NGXLogger} from "ngx-logger";
 import {HttpResponse} from "@angular/common/http";
@@ -41,7 +41,7 @@ export class QbitService {
         }
         return throwError(new Error("Request failed"));
       })),
-        tap(data=>{this.logger.trace(data)}),
+        // tap(data=>{this.logger.trace(data)}),
         switchMap((data:IServerStats)=>{
         return of(new ServerStats(data))
       }));
@@ -52,9 +52,10 @@ export class QbitService {
       .pipe(switchMap(
           ()=>this.fetchTorrentsMainData()),
         // tap(value => this.logger.trace("data from dashboard service",value)),
-        retry(2),
+        // retry(0),
         share(),
-        takeUntil(this.stopPolling)
+        // takeUntil(this.stopPolling)
+        take(1)
       )
   }
 
