@@ -60,11 +60,12 @@ export class ServerStats {
   }
 
   private parseTorrentsObject(torrents:object): Map<string,TorrentData> {
-    console.log(torrents);
+    // console.log(torrents);
     const m=new Map<string,TorrentData>();
     for (const k in torrents){
       // @ts-ignore
       m.set(k,new TorrentData(k,torrents[k],null));
+      console.log("new torrent created "+k );
     }
     return m;
   }

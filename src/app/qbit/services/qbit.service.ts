@@ -1,5 +1,18 @@
 import { Injectable } from '@angular/core';
-import {Observable, of, retry, share, Subject, switchMap, take, takeUntil, tap, throwError, timer} from "rxjs";
+import {
+  concatMap,
+  Observable,
+  of,
+  retry,
+  share,
+  Subject,
+  switchMap,
+  take,
+  takeUntil,
+  tap,
+  throwError,
+  timer
+} from "rxjs";
 import {FeatureHttpClient} from "./featureHttpClient";
 import {NGXLogger} from "ngx-logger";
 import {HttpResponse} from "@angular/common/http";
@@ -13,7 +26,10 @@ export class QbitService {
   private stopPolling = new Subject();
 
   constructor(private readonly http:FeatureHttpClient,
-              private readonly logger:NGXLogger) { }
+              private readonly logger:NGXLogger) {
+
+
+  }
 
   ngOnDestroy() {
     this.stopPollingData();
@@ -29,33 +45,27 @@ export class QbitService {
       }));
   }
 
-  public fetchTorrentsMainData():Observable<ServerStats>{
+  public fetchServerData():Observable<IServerStats>{
     return this.http.get<string>(this.QBIT_MAIN_DATA_ENDPOINT,{observe:"response"})
-      .pipe(switchMap((response=>{
+      .pipe(
+        concatMap((response=>{
         if (this.isResponseValid(response)){
-          // console.time();
           const json:IServerStats=JSON.parse(<string>response?.body);
-          // const x:ServerStats=new ServerStats(json)
-          // console.timeEnd();
           return of(json);
         }
         return throwError(new Error("Request failed"));
-      })),
-        // tap(data=>{this.logger.trace(data)}),
-        switchMap((data:IServerStats)=>{
-        return of(new ServerStats(data))
-      }));
+      })));
   }
 
-  public fetchDataByInterval(interval:number=1000):Observable<ServerStats>{
+  public fetchDataByInterval(interval:number=1500):Observable<IServerStats>{
     return timer(0,interval)
       .pipe(switchMap(
-          ()=>this.fetchTorrentsMainData()),
-        // tap(value => this.logger.trace("data from dashboard service",value)),
-        // retry(0),
+          ()=>this.fetchServerData()),
+        tap(value => this.logger.trace(value)),
+        retry(0),
         share(),
-        // takeUntil(this.stopPolling)
-        take(1)
+        takeUntil(this.stopPolling),
+        take(5)
       )
   }
 

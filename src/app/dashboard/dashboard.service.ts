@@ -16,18 +16,18 @@ export class DashboardService {
   constructor(private readonly http:HttpClient,
               private readonly logger:NGXLogger,
               private readonly qbit:QbitService) {
-    this.logger.trace(`${DashboardService.name } started`);
-    this.serverState$=this.qbit.fetchDataByInterval()
-      .pipe(switchMap((value)=>{
-          return of(value.serverState);
-        }),
-        tap(value => {
-          const x=this.serverStateHistory.getValue();
-          x.push(value);
-          this.serverStateHistory.next(x);
-        }),
-        take(1)
-      );
+    // this.logger.trace(`${DashboardService.name } started`);
+    // this.serverState$=this.qbit.fetchDataByInterval()
+    //   .pipe(switchMap((value)=>{
+    //       return of(value.serverState);
+    //     }),
+    //     tap(value => {
+    //       const x=this.serverStateHistory.getValue();
+    //       x.push(value);
+    //       this.serverStateHistory.next(x);
+    //     }),
+    //     take(1)
+    //   );
   }
 
   public getServerState():Observable<ServerState>{

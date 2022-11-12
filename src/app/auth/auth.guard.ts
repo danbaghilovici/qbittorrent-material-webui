@@ -15,12 +15,12 @@ export class AuthGuard implements CanActivate,CanLoad {
     if (this.authService.isAuthenticated()){
       return true;
     }
-    console.log("not authenticated, redirecting")
+    // console.log("not authenticated, redirecting")
     return this.router.navigate(["/login"])
   }
 
   canLoad(route: Route, segments: UrlSegment[]): Observable<boolean | UrlTree> | Promise<boolean | UrlTree> | boolean | UrlTree {
-    console.log("returned true for can load")
+    // console.log("returned true for can load")
     return true;
   }
 

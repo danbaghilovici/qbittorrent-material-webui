@@ -47,7 +47,7 @@ export class DashboardComponent implements OnInit,OnDestroy {
 
 
   ngOnInit(): void {
-    this.logger.trace("dashboard loaded");
+    // this.logger.trace("dashboard loaded");
     this.serverState$=this.dashboardService.getServerState();
     this.serverHistory=this.dashboardService.getServerStateHistory();
 

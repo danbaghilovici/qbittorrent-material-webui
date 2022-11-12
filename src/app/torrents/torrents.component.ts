@@ -3,7 +3,7 @@ import {Observable, of, switchMap, tap} from "rxjs";
 import {MatTableDataSource} from "@angular/material/table";
 import {TorrentsService} from "./torrents.service";
 import {NGXLogger} from "ngx-logger";
-import {ITorrentHistory, TorrentData} from "../qbit/models/torrent-data.model";
+import {ITorrentHistory, TorrentData, TorrentHistory} from "../qbit/models/torrent-data.model";
 import {animate, state, style, transition, trigger} from "@angular/animations";
 
 
@@ -49,29 +49,30 @@ export class TorrentsComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.torrents$=this.torrentsService.getTorrentData();
-    this.torrents$.pipe(
-      tap((data)=>{
-        const arr=[];
-        for (let c of data.values()){
-          arr.push(c);
-        }
-        // this.logger.trace("arr is",arr);
-      })
-    ).subscribe((data)=>{
-      // console.log("asdwa");
-      this.dataSource.connect().next(Array.from(data.values()));
-
-    });
+    // this.torrents$=this.torrentsService.getTorrentData();
+    // this.torrents$.pipe(
+    //   tap((data)=>{
+    //     const arr=[];
+    //     for (let c of data.values()){
+    //       arr.push(c);
+    //     }
+    //     // this.logger.trace("arr is",arr);
+    //   })
+    // ).subscribe((data)=>{
+    //   // console.log("asdwa");
+    //   this.dataSource.connect().next(Array.from(data.values()));
+    //
+    // });
 
   }
 
-  public getTorrentHistoryById(id:string):Observable<ITorrentHistory[]>{
-    return this.torrents$.pipe(
-      switchMap((data)=>{
-        return of(data.get(id).history);
-      })
-    );
+  public getTorrentHistoryById(id:string):Observable<TorrentHistory[]>{
+    return of();
+    // return this.torrents$.pipe(
+    //   switchMap((data)=>{
+    //     return of(data.get(id).history);
+    //   })
+    // );
   }
 
   onExpandClick($event:Event,element:TorrentData){

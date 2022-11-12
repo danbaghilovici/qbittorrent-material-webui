@@ -7,6 +7,30 @@ export interface ITorrentHistory {
   dlSpeed: number;
 }
 
+export class TorrentHistory{
+  private _date:number;
+  private _dlSpeed:string;
+  private _upSpeed:string;
+
+  constructor(dlSpeed:string,upSpeed:string) {
+    this._date=Date.now();
+    this._dlSpeed=dlSpeed+"";
+    this._upSpeed=upSpeed+"";
+  }
+
+  get date(): number {
+    return this._date;
+  }
+
+  get dlSpeed(): string {
+    return this._dlSpeed;
+  }
+
+  get upSpeed(): string {
+    return this._upSpeed;
+  }
+}
+
 export interface ITorrentData {
   added_on: number;
   amount_left: number;
@@ -60,91 +84,105 @@ export interface ITorrentData {
 
 
 export class TorrentData {
-  private readonly _id: string;
-  private readonly _addedOn: Date;
-  private readonly _amountLeft: number;
-  private readonly _autoTmm: boolean;
-  private readonly _availability: number;
-  private readonly _category: string;
-  private readonly _completed: number;
-  private readonly _completionOn: number;
-  private readonly _contentPath: string;
-  private readonly _dlLimit: number;
-  private readonly _dlSpeed: number;
-  private readonly _downloadPath: string;
-  private readonly _downloaded: number;
-  private readonly _downloadedSession: number;
-  private readonly _eta: number;
-  private readonly _f_l_piecePrio: boolean;
-  private readonly _forceStart: boolean;
-  private readonly _infoHashV1: string;
-  private readonly _infoHashV2: string;
-  private readonly _lastActivity: number;
-  private readonly _magnetUri: string;
-  private readonly _maxRatio: number;
-  private readonly _maxSeedingTime: number;
-  private readonly _name: string;
-  private readonly _numComplete: number;
-  private readonly _numIncomplete: number;
-  private readonly _numLeeches: number;
-  private readonly _numSeeds: number;
-  private readonly _priority: number;
-  private readonly _progress: number;
-  private readonly _ratio: number;
-  private readonly _ratioLimit: number;
-  private readonly _savePath: string;
-  private readonly _seedingTime: number;
-  private readonly _seedingTimeLimit: number;
-  private readonly _seenComplete: number;
-  private readonly _seqDl: boolean;
-  private readonly _size: number;
-  private readonly _state: "stalledUP";
-  private readonly _superSeeding: boolean;
-  private readonly _tags: string[];
-  private readonly _timeActive: number;
-  private readonly _totalSize: number;
-  private readonly _tracker: string;
-  private readonly _trackersCount: number;
-  private readonly _upLimit: number;
-  private readonly _uploaded: number;
-  private readonly _uploadedSession: number;
-  private readonly _upSpeed: number
+  private  _id: string;
+  private  _addedOn: Date;
+  private  _amountLeft: number;
+  private  _autoTmm: boolean;
+  private  _availability: number;
+  private  _category: string;
+  private  _completed: number;
+  private  _completionOn: number;
+  private  _contentPath: string;
+  private  _dlLimit: number;
+  private _dlSpeed: number;
+  private  _downloadPath: string;
+  private  _downloaded: number;
+  private  _downloadedSession: number;
+  private  _eta: number;
+  private  _f_l_piecePrio: boolean;
+  private  _forceStart: boolean;
+  private  _infoHashV1: string;
+  private  _infoHashV2: string;
+  private  _lastActivity: number;
+  private  _magnetUri: string;
+  private  _maxRatio: number;
+  private  _maxSeedingTime: number;
+  private  _name: string;
+  private  _numComplete: number;
+  private  _numIncomplete: number;
+  private  _numLeeches: number;
+  private  _numSeeds: number;
+  private  _priority: number;
+  private  _progress: number;
+  private  _ratio: number;
+  private  _ratioLimit: number;
+  private  _savePath: string;
+  private  _seedingTime: number;
+  private  _seedingTimeLimit: number;
+  private  _seenComplete: number;
+  private  _seqDl: boolean;
+  private  _size: number;
+  private  _state: "stalledUP";
+  private  _superSeeding: boolean;
+  private  _tags: string[];
+  private  _timeActive: number;
+  private  _totalSize: number;
+  private  _tracker: string;
+  private  _trackersCount: number;
+  private  _upLimit: number;
+  private  _uploaded: number;
+  private  _uploadedSession: number;
+  private  _upSpeed: number
 
-  private readonly _history: ITorrentHistory[];
+  private readonly _history: TorrentHistory[];
 
-  constructor(id: string, json: ITorrentData, from: TorrentData = null) {
-    this._id = from != null ? from._id : id;
+  constructor(id: string, json: ITorrentData) {
+    this._id = id;
     // @ts-ignore
-    this._addedOn = new Date((from != null ? from._addedOn : json.added_on) * 1000);
-    this._amountLeft = from != null ? from._amountLeft : json.amount_left;
-    this._autoTmm = from != null ? from._autoTmm : json.auto_tmm;
-    this._availability = from != null ? from._availability : json.availability;
-    this._name = from != null ? from._name : json.name;
-    this._progress = from != null ? from._progress : json.progress;
-    this._timeActive = from != null ? from._timeActive : json.time_active;
-    this._tracker = from != null ? from._tracker : json.tracker;
-    this._infoHashV1 = from != null ? from._infoHashV1 : json.infohash_v1;
-    this._infoHashV2 = from != null ? from._infoHashV2 : json.infohash_v2;
-    this._magnetUri = from != null ? from._magnetUri : json.magnet_uri;
-    this._upSpeed = from != null ? from._upSpeed : json.upspeed;
-    this._dlSpeed = from != null ? from._dlSpeed : json.dlspeed;
-    this._tags = this.generateTags((from != null ? from._tags : json.tags) + "");
-    const k: ITorrentHistory = {date: Date.now(), upSpeed: this._upSpeed, dlSpeed: this._dlSpeed};
-    if (from != null) {
-      this._history = from._history;
-    } else {
-      this._history = [];
-    }
-    this.insertIntoHistory(k,from);
+    this._addedOn = new Date((json.added_on) * 1000);
+    this._amountLeft = json.amount_left;
+    this._autoTmm =  json.auto_tmm;
+    this._availability =  json.availability;
+    this._name =  json.name;
+    this._progress =  json.progress;
+    this._timeActive =  json.time_active;
+    this._tracker =  json.tracker;
+    this._infoHashV1 =  json.infohash_v1;
+    this._infoHashV2 =  json.infohash_v2;
+    this._magnetUri = json.magnet_uri;
+    this._upSpeed =  json.upspeed;
+    this._dlSpeed =  json.dlspeed;
+    this._tags = this.generateTags((json.tags) + "");
+    // const k: ITorrentHistory = {date: Date.now(), upSpeed: this._upSpeed, dlSpeed: this._dlSpeed};
+    const k: TorrentHistory = new TorrentHistory(this._dlSpeed+"",this._upSpeed+"");
+    this._history = [];
 
   }
 
-  private insertIntoHistory(data: ITorrentHistory,from:any): void {
+  public updateFrom(id:string,json:ITorrentData): TorrentData{
+    console.log("updating data");
+    if (id !== this._id){
+      throw Error("Missmatch ids");
+    }
+    this._upSpeed =  json.upspeed;
+    this._dlSpeed =  json.dlspeed;
+    this.insertIntoHistory(new TorrentHistory(Math.random()+"",Math.random()+""),null);
+    this._history.forEach(value => {
+      console.log(JSON.stringify(value))
+    })
+    return this;
+
+  }
+
+  private insertIntoHistory(data: TorrentHistory,from:any): void {
     if (this._history.length >= 10) {
       this._history.shift();
     }
     this._history.push(data);
-    console.log("last data pushed "+JSON.stringify(data)+";; "+JSON.stringify(this._history)+";; "+from);
+    // this._history.forEach(value => {
+    //   console.log(value.dlSpeed);
+    // });
+    console.log("last data pushed "+" id "+this._id+" ;;"+JSON.stringify(data)+";; "+JSON.stringify(this._history)+";; "+from);
   }
 
   private generateTags(value: string): string[] {
@@ -356,7 +394,7 @@ export class TorrentData {
     return this._upSpeed;
   }
 
-  get history(): ITorrentHistory[] {
+  get history(): TorrentHistory[] {
     return this._history;
   }
 }

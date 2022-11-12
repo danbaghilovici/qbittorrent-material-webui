@@ -19,7 +19,7 @@ export class AuthService {
     if (!this.areCredentialsValid(credentials)){
       return ;
     }
-    console.log("v3")
+    // console.log("v3")
     const url=this.getRelativeUrl("api/v2/auth/login");
       // +this.createCredentialsQuery(credentials);
     const b={username:credentials.username,password:credentials.password};
@@ -69,9 +69,9 @@ export class AuthService {
   }
 
   public isAuthenticated(): Observable<boolean> {
-    console.log(this.cookieService.get(this.COOKIE_NAME));
-    console.log(this.cookieService.getAll())
-    console.log(localStorage.getItem("SID"))
+    // console.log(this.cookieService.get(this.COOKIE_NAME));
+    // console.log(this.cookieService.getAll())
+    // console.log(localStorage.getItem("SID"))
     return this.getVersion().pipe(switchMap((version)=>{
       return of(version.length!==0)
     }));
