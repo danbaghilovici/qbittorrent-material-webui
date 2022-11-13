@@ -8,25 +8,25 @@ export interface ITorrentHistory {
 }
 
 export class TorrentHistory{
-  private _date:number;
-  private _dlSpeed:string;
-  private _upSpeed:string;
+  private _date:Date;
+  private _dlSpeed:number;
+  private _upSpeed:number;
 
-  constructor(dlSpeed:string,upSpeed:string) {
-    this._date=Date.now();
-    this._dlSpeed=dlSpeed+"";
-    this._upSpeed=upSpeed+"";
+  constructor(dlSpeed:number,upSpeed:number) {
+    this._date=new Date();
+    this._dlSpeed=dlSpeed;
+    this._upSpeed=upSpeed;
   }
 
-  get date(): number {
+  get date(): Date {
     return this._date;
   }
 
-  get dlSpeed(): string {
+  get dlSpeed(): number {
     return this._dlSpeed;
   }
 
-  get upSpeed(): string {
+  get upSpeed(): number {
     return this._upSpeed;
   }
 }
@@ -153,9 +153,8 @@ export class TorrentData {
     this._upSpeed =  json.upspeed;
     this._dlSpeed =  json.dlspeed;
     this._tags = this.generateTags((json.tags) + "");
-    // const k: ITorrentHistory = {date: Date.now(), upSpeed: this._upSpeed, dlSpeed: this._dlSpeed};
-    const k: TorrentHistory = new TorrentHistory(this._dlSpeed+"",this._upSpeed+"");
-    this._history = [];
+    const k: TorrentHistory = new TorrentHistory(this._dlSpeed,this._upSpeed);
+    this._history = this.generateNewHistoryArray();
 
   }
 
@@ -166,10 +165,7 @@ export class TorrentData {
     }
     this._upSpeed =  json.upspeed;
     this._dlSpeed =  json.dlspeed;
-    this.insertIntoHistory(new TorrentHistory(Math.random()+"",Math.random()+""),null);
-    this._history.forEach(value => {
-      console.log(JSON.stringify(value))
-    })
+    this.insertIntoHistory(new TorrentHistory(this._dlSpeed,this._upSpeed),null);
     return this;
 
   }
@@ -182,7 +178,15 @@ export class TorrentData {
     // this._history.forEach(value => {
     //   console.log(value.dlSpeed);
     // });
-    console.log("last data pushed "+" id "+this._id+" ;;"+JSON.stringify(data)+";; "+JSON.stringify(this._history)+";; "+from);
+    // console.log("last data pushed "+" id "+this._id+" ;;"+JSON.stringify(data)+";; "+JSON.stringify(this._history)+";; "+from);
+  }
+
+  private generateNewHistoryArray():TorrentHistory[]{
+    const h=[];
+    for (let i=0;i<10;i++){
+      h.push(new TorrentHistory(0,0));
+    }
+    return h;
   }
 
   private generateTags(value: string): string[] {

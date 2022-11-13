@@ -49,30 +49,29 @@ export class TorrentsComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    // this.torrents$=this.torrentsService.getTorrentData();
-    // this.torrents$.pipe(
-    //   tap((data)=>{
-    //     const arr=[];
-    //     for (let c of data.values()){
-    //       arr.push(c);
-    //     }
-    //     // this.logger.trace("arr is",arr);
-    //   })
-    // ).subscribe((data)=>{
-    //   // console.log("asdwa");
-    //   this.dataSource.connect().next(Array.from(data.values()));
-    //
-    // });
+    this.torrents$=this.torrentsService.getTorrentsData();
+    this.torrents$.pipe(
+      tap((data)=>{
+        const arr=[];
+        for (let c of data.values()){
+          arr.push(c);
+        }
+        // this.logger.trace("arr is",arr);
+      })
+    ).subscribe((data)=>{
+      // console.log("asdwa");
+      this.dataSource.connect().next(Array.from(data.values()));
+
+    });
 
   }
 
   public getTorrentHistoryById(id:string):Observable<TorrentHistory[]>{
-    return of();
-    // return this.torrents$.pipe(
-    //   switchMap((data)=>{
-    //     return of(data.get(id).history);
-    //   })
-    // );
+    return this.torrents$.pipe(
+      switchMap((data)=>{
+        return of(data.get(id).history);
+      })
+    );
   }
 
   onExpandClick($event:Event,element:TorrentData){

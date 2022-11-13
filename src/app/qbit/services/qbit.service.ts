@@ -65,7 +65,7 @@ export class QbitService {
         retry(0),
         share(),
         takeUntil(this.stopPolling),
-        take(5)
+        // take(5)
       )
   }
 

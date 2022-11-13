@@ -71,7 +71,7 @@
            [@detailExpand]="expandedElements.has(element.id) ? 'expanded' : 'collapsed'">
         <mat-grid-list cols="2" rowHeight="2:1">
           <mat-grid-tile>
-            <app-torrent-chart ></app-torrent-chart>
+            <app-torrent-chart [torrentHistory]="getTorrentHistoryById(element.id)"></app-torrent-chart>
           </mat-grid-tile>
           <mat-grid-tile>
             <div id="info-grid">

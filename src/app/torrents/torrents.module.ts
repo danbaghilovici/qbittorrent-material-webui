@@ -15,6 +15,7 @@ import {MatListModule} from "@angular/material/list";
 import {ShortDomainPipe} from "./short-domain.pipe";
 import {MatRippleModule} from "@angular/material/core";
 import {TorrentChartModule} from "./torrent-chart/torrent-chart.module";
+import {LoggerModule, NgxLoggerLevel} from "ngx-logger";
 
 
 
@@ -37,7 +38,8 @@ import {TorrentChartModule} from "./torrent-chart/torrent-chart.module";
     MatGridListModule,
     MatListModule,
     MatRippleModule,
-    TorrentChartModule
+    TorrentChartModule,
+    LoggerModule.forRoot({level: NgxLoggerLevel.TRACE}),
   ],
   exports:[TorrentsComponent]
 })

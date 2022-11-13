@@ -10,13 +10,7 @@ import {AuthService} from "./auth/auth.service";
 import {HttpClientModule} from "@angular/common/http";
 import {CommonModule} from "@angular/common";
 import {LoggerModule, NgxLoggerLevel} from "ngx-logger";
-import {MatToolbarModule} from "@angular/material/toolbar";
-import {MatIconModule} from "@angular/material/icon";
-import {MatCheckboxModule} from "@angular/material/checkbox";
-import {MatTableModule} from "@angular/material/table";
-import {MatSortModule} from "@angular/material/sort";
-import {MatButtonModule} from "@angular/material/button";
-import {MatProgressBarModule} from "@angular/material/progress-bar";
+
 
 @NgModule({
   declarations: [

@@ -26,7 +26,7 @@ const routes: Routes = [
     CommonModule,
     HttpClientModule,
     RouterModule.forChild(routes),
-    // LoggerModule.forRoot({level: NgxLoggerLevel.TRACE}),
+    LoggerModule.forRoot({level: NgxLoggerLevel.TRACE}),
     QbitModule,
     MatToolbarModule,
     MatIconModule,
