@@ -12,6 +12,7 @@ import {MatButtonModule} from "@angular/material/button";
 import {TorrentsModule} from "../torrents/torrents.module";
 import {MatSidenavModule} from "@angular/material/sidenav";
 import {MatListModule} from "@angular/material/list";
+import {MatProgressSpinnerModule} from "@angular/material/progress-spinner";
 
 const routes: Routes = [
   {path:"", component: DashboardComponent}
@@ -22,18 +23,19 @@ const routes: Routes = [
     DashboardComponent
   ],
   providers:[DashboardService],
-  imports: [
-    CommonModule,
-    HttpClientModule,
-    RouterModule.forChild(routes),
-    LoggerModule.forRoot({level: NgxLoggerLevel.TRACE}),
-    QbitModule,
-    MatToolbarModule,
-    MatIconModule,
-    MatButtonModule,
-    TorrentsModule,
-    MatSidenavModule,
-    MatListModule
-  ]
+    imports: [
+        CommonModule,
+        HttpClientModule,
+        RouterModule.forChild(routes),
+        LoggerModule.forRoot({level: NgxLoggerLevel.TRACE}),
+        QbitModule,
+        MatToolbarModule,
+        MatIconModule,
+        MatButtonModule,
+        TorrentsModule,
+        MatSidenavModule,
+        MatListModule,
+        MatProgressSpinnerModule
+    ]
 })
 export class DashboardModule { }

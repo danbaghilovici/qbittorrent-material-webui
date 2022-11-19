@@ -34,3 +34,15 @@ h1.example-app-name {
   flex: 1 0 auto;
 }
 
+mat-toolbar-row{
+  flex-wrap: wrap;
+  //overflow: scroll;
+  height: 100%;
+
+  span {
+    padding: 0.2rem;
+    mat-icon{
+      vertical-align: bottom;
+    }
+  }
+}

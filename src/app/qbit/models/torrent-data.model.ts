@@ -1,4 +1,4 @@
-import {HistoryArray} from "./history-array.model";
+
 
 
 export interface ITorrentHistory {

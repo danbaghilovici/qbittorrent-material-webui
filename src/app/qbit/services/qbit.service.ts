@@ -1,5 +1,7 @@
 import { Injectable } from '@angular/core';
 import {
+  BehaviorSubject,
+  combineLatest,
   concatMap,
   Observable,
   of,
@@ -16,17 +18,36 @@ import {
 import {FeatureHttpClient} from "./featureHttpClient";
 import {NGXLogger} from "ngx-logger";
 import {HttpResponse} from "@angular/common/http";
-import {IServerStats, ServerStats} from "../models/server-stats.model";
+import {IPreferences, IServerStats, ServerStats} from "../models/server-stats.model";
 
 @Injectable()
 export class QbitService {
 
-  private readonly QBIT_VERSION_ENDPOINT:string="api/v2/app/version";
-  private readonly QBIT_MAIN_DATA_ENDPOINT:string="api/v2/sync/maindata";
+  // todo
+  //  fix RID querying for better perf
+
+  private static readonly QBIT_VERSION_ENDPOINT:string="api/v2/app/version";
+  private static readonly QBIT_MAIN_DATA_ENDPOINT:string="api/v2/sync/maindata";
+  private static readonly QBIT_PREFERENCES_ENDPOINT:string="api/v2/app/preferences";
+  private static readonly QBIT_ADD_ENDPOINT:string="api/v2/torrents/add"; //post
+  private static RID:number=null;
+
+  private preferences:BehaviorSubject<IPreferences> = new BehaviorSubject<IPreferences>(null)
+
   private stopPolling = new Subject();
 
   constructor(private readonly http:FeatureHttpClient,
               private readonly logger:NGXLogger) {
+
+    this.fetchPreferences().subscribe(data=>{
+      this.logger.debug("constru",data);
+      this.preferences.next(data);
+    });
+
+    // combineLatest([
+    //   this.fetchPreferences(),
+    //   this.fetchVersion(),
+    // ]).
 
 
   }
@@ -36,7 +57,7 @@ export class QbitService {
   }
 
   public fetchVersion():Observable<string>{
-    return this.http.get<string>(this.QBIT_VERSION_ENDPOINT,{observe:"response"})
+    return this.http.get<string>(QbitService.QBIT_VERSION_ENDPOINT,{observe:"response"})
       .pipe(switchMap((response)=>{
         if (this.isResponseValid(response) && response.body?.startsWith("v")){
           return of(response.body?.replace("v",""));
@@ -45,19 +66,36 @@ export class QbitService {
       }));
   }
 
+  private fetchPreferences():Observable<IPreferences>{
+    return this.http.get<string>(QbitService.QBIT_PREFERENCES_ENDPOINT,{observe:"response"})
+      .pipe(
+        concatMap((response=>{
+          if (this.isResponseValid(response)){
+            const json:IPreferences=JSON.parse(<string>response?.body);
+            return of(json);
+          }
+          return throwError(new Error("Request failed"));
+        })));
+  }
+
   public fetchServerData():Observable<IServerStats>{
-    return this.http.get<string>(this.QBIT_MAIN_DATA_ENDPOINT,{observe:"response"})
+      return this.http.get<string>(QbitService.QBIT_MAIN_DATA_ENDPOINT,{observe:"response",params:QbitService.setRidParam()})
       .pipe(
         concatMap((response=>{
         if (this.isResponseValid(response)){
           const json:IServerStats=JSON.parse(<string>response?.body);
+          QbitService.RID=json.rid;
           return of(json);
         }
         return throwError(new Error("Request failed"));
       })));
   }
 
-  public fetchDataByInterval(interval:number=1500):Observable<IServerStats>{
+  private static setRidParam(){
+    return {};
+  }
+
+  public fetchDataByInterval(interval:number=3333):Observable<IServerStats>{
     return timer(0,interval)
       .pipe(switchMap(
           ()=>this.fetchServerData()),

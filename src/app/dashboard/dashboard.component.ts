@@ -2,8 +2,6 @@ import {ChangeDetectorRef, Component, OnDestroy, OnInit} from '@angular/core';
 import {BehaviorSubject, Observable, of, Subscription, switchMap, tap} from "rxjs";
 import {DashboardService} from "./dashboard.service";
 import {NGXLogger} from "ngx-logger";
-import {animate, state, style, transition, trigger} from '@angular/animations';
-import {HistoryArray} from "../qbit/models/history-array.model";
 import {ServerState} from "../qbit/models/server-state.model";
 import {MediaMatcher} from "@angular/cdk/layout";
 
@@ -18,7 +16,6 @@ export class DashboardComponent implements OnInit,OnDestroy {
   public mobileQuery: MediaQueryList;
   private poolingSub:Subscription=new Subscription();
   public serverState$:Observable<ServerState>;
-  public serverHistory:Observable<HistoryArray>;
   private _mobileQueryListener: () => void;
   fillerNav = Array.from({length: 50}, (_, i) => `Nav Item ${i + 1}`);
 
@@ -49,7 +46,6 @@ export class DashboardComponent implements OnInit,OnDestroy {
   ngOnInit(): void {
     // this.logger.trace("dashboard loaded");
     this.serverState$=this.dashboardService.getServerState();
-    this.serverHistory=this.dashboardService.getServerStateHistory();
 
   }
 
