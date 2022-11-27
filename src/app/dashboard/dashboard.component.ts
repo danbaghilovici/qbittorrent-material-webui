@@ -18,6 +18,7 @@ export class DashboardComponent implements OnInit,OnDestroy {
   public serverState$:Observable<ServerState>;
   private _mobileQueryListener: () => void;
   fillerNav = Array.from({length: 50}, (_, i) => `Nav Item ${i + 1}`);
+  // fillerNav = Array.from([]);
 
   fillerContent = Array.from(
     {length: 50},

@@ -122,7 +122,7 @@ export class TorrentData {
   private  _seenComplete: number;
   private  _seqDl: boolean;
   private  _size: number;
-  private  _state: "stalledUP";
+  private  _state: "stalledUP"|"pausedUp";
   private  _superSeeding: boolean;
   private  _tags: string[];
   private  _timeActive: number;
@@ -155,6 +155,16 @@ export class TorrentData {
     this._tags = this.generateTags((json.tags) + "");
     const k: TorrentHistory = new TorrentHistory(this._dlSpeed,this._upSpeed);
     this._history = this.generateNewHistoryArray();
+    this._size=json.size;
+    this._ratio=json.ratio;
+    this._numSeeds=json.num_seeds;
+    this._numComplete=json.num_complete;
+    this._numLeeches=json.num_leechs;
+    this._numIncomplete=json.num_incomplete;
+    this._dlSpeed=json.dlspeed;
+    this._upSpeed=json.upspeed;
+    this._dlLimit=json.dl_limit;
+    this._upLimit=json.up_limit;
 
   }
 
@@ -354,7 +364,7 @@ export class TorrentData {
     return this._size;
   }
 
-  get state(): "stalledUP" {
+  get state(): string {
     return this._state;
   }
 

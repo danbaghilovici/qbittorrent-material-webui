@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, Input, OnInit} from '@angular/core';
 import {Observable, of, switchMap, tap} from "rxjs";
 import {MatTableDataSource} from "@angular/material/table";
 import {TorrentsService} from "./torrents.service";
@@ -21,18 +21,27 @@ import {animate, state, style, transition, trigger} from "@angular/animations";
   ],
 })
 export class TorrentsComponent implements OnInit {
+  @Input() alternateSpeeds:{upSpeedLimit:number,dlSpeedLimit:number}={upSpeedLimit:-1,dlSpeedLimit:-1};
   // public torrents:BehaviorSubject<TorrentData[]>=new BehaviorSubject<TorrentData[]>([])
   public tableTorrents:{id:string,name:string,time:number}[]=[];
   public torrents$:Observable<Map<string,TorrentData>>;
+  public isListViewActive=true;
 
   columnsToDisplay = [
     'select',
     'id',
     'name',
-    'addedOn',
+    'size',
+    // 'status',
+    'seeds',
+    'peers',
+    'down-speed',
+    'up-speed',
+    'ratio',
     'timeActive',
     'tags',
     'progress',
+    'addedOn',
   ];
   columnsToDisplayWithExpand = [...this.columnsToDisplay, 'expand'];
   // @ts-ignore

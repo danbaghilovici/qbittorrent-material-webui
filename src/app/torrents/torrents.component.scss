@@ -1,3 +1,6 @@
+:host{
+  height: 100%;
+}
 table {
   width: 100%;
 }
@@ -49,4 +52,21 @@ mat-toolbar-row span mat-icon{
   width: 100%;
   background: red;
 }
+
+mat-grid-tile {
+  background: lightblue;
+}
+mat-card{
+  //border-radius: 0!important;
+  padding-bottom: 0;
+  mat-card-header{
+    align-items: center;
+    justify-content: space-between;
+  }
+  mat-card-content{
+    margin: 0 -16px;
+  }
+}
+
+
 

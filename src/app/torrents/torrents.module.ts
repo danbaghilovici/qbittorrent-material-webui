@@ -16,13 +16,16 @@ import {ShortDomainPipe} from "./short-domain.pipe";
 import {MatRippleModule} from "@angular/material/core";
 import {TorrentChartModule} from "./torrent-chart/torrent-chart.module";
 import {LoggerModule, NgxLoggerLevel} from "ngx-logger";
+import {MatCardModule} from "@angular/material/card";
+import {MatTooltipModule} from "@angular/material/tooltip";
+import {FormatBytesPipe} from "./format-bytes.pipe";
 
 
 
 
 @NgModule({
   declarations: [
-    TorrentsComponent,ShortDomainPipe
+    TorrentsComponent,ShortDomainPipe,FormatBytesPipe
   ],
   providers:[TorrentsService],
   imports: [
@@ -40,6 +43,8 @@ import {LoggerModule, NgxLoggerLevel} from "ngx-logger";
     MatRippleModule,
     TorrentChartModule,
     LoggerModule.forRoot({level: NgxLoggerLevel.TRACE}),
+    MatCardModule,
+    MatTooltipModule,
   ],
   exports:[TorrentsComponent]
 })
