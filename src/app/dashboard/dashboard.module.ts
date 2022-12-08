@@ -14,6 +14,7 @@ import {MatSidenavModule} from "@angular/material/sidenav";
 import {MatListModule} from "@angular/material/list";
 import {MatProgressSpinnerModule} from "@angular/material/progress-spinner";
 import {MatCardModule} from "@angular/material/card";
+import {MatMenuModule} from "@angular/material/menu";
 
 const routes: Routes = [
   {path:"", component: DashboardComponent}
@@ -37,7 +38,8 @@ const routes: Routes = [
     MatSidenavModule,
     MatListModule,
     MatProgressSpinnerModule,
-    MatCardModule
+    MatCardModule,
+    MatMenuModule
   ]
 })
 export class DashboardModule { }

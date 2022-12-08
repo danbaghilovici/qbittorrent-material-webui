@@ -1,0 +1,34 @@
+#login-form{
+
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    width: 90%;
+    max-width: 37.5rem;
+  p{
+    margin-top: 0;
+  }
+
+  p, mat-form-field{
+    width: 100%;
+  }
+
+  #submit-button{
+    width: 100%;
+  }
+
+}
+mat-grid-list{
+  height: calc(100% - #{4*2}rem);
+
+  @media (max-width: 599px){
+    height: calc(100% - #{3.5*2}rem);
+  }
+}
+mat-progress-bar{
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+}
+

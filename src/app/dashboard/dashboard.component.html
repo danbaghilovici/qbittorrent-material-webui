@@ -45,6 +45,18 @@
       <button mat-icon-button class="example-icon" aria-label="Example icon-button with menu icon">
         <mat-icon>dark_mode</mat-icon>
       </button>
+      <button mat-icon-button
+              class="example-icon"
+              aria-label="Example icon-button with menu icon"
+              [matMenuTriggerFor]="menu">
+        <mat-icon>account_circle</mat-icon>
+      </button>
+      <mat-menu #menu="matMenu">
+        <button mat-menu-item (click)="onLogOutClicked()">
+          <mat-icon>logout</mat-icon>
+          <span>Log out</span>
+        </button>
+      </mat-menu>
 
     </mat-toolbar-row>
     <mat-toolbar-row class="status-toolbar">

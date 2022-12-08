@@ -1,26 +1,27 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import {FEATURE_HTTP_INTERCEPTORS, FeatureHttpClient} from "./services/featureHttpClient";
-import {FeatureApiPathInterceptor} from "./feature-api.interceptor";
+import {FEATURE_HTTP_INTERCEPTORS, QBitHttpClient} from "./services/q-bit-http-client.service";
+import {QBitPathInterceptor} from "./q-bit.interceptor";
 import {QbitService} from "./services/qbit.service";
 import {HttpClientModule} from "@angular/common/http";
+import {Utils} from "./models/utils";
 
 
 @NgModule({
   providers:[
-    FeatureApiPathInterceptor,
+    QBitPathInterceptor,
     {
       provide: FEATURE_HTTP_INTERCEPTORS,
-      useClass: FeatureApiPathInterceptor,
+      useClass: QBitPathInterceptor,
       multi: true
     },
-    FeatureHttpClient,
+    QBitHttpClient,
     QbitService
   ],
   declarations: [],
   imports: [
     CommonModule
   ],
-  exports:[HttpClientModule]
+  exports:[]
 })
 export class QbitModule { }

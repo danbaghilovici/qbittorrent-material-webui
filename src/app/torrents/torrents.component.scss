@@ -53,11 +53,11 @@ mat-toolbar-row span mat-icon{
   background: red;
 }
 
-mat-grid-tile {
-  background: lightblue;
-}
-mat-card{
-  //border-radius: 0!important;
+//mat-grid-tile {
+//  background: lightblue;
+//}
+mat-card.table-card{
+  border-radius: 0!important;
   padding-bottom: 0;
   mat-card-header{
     align-items: center;

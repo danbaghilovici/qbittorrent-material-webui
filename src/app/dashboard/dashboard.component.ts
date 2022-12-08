@@ -1,9 +1,11 @@
 import {ChangeDetectorRef, Component, OnDestroy, OnInit} from '@angular/core';
-import {BehaviorSubject, Observable, of, Subscription, switchMap, tap} from "rxjs";
+import {BehaviorSubject, catchError, Observable, of, Subscription, switchMap, tap} from "rxjs";
 import {DashboardService} from "./dashboard.service";
 import {NGXLogger} from "ngx-logger";
 import {ServerState} from "../qbit/models/server-state.model";
 import {MediaMatcher} from "@angular/cdk/layout";
+import {AuthService} from "../auth/auth.service";
+import {Router} from "@angular/router";
 
 @Component({
   selector: 'app-dashboard',
@@ -12,6 +14,7 @@ import {MediaMatcher} from "@angular/cdk/layout";
 
 })
 export class DashboardComponent implements OnInit,OnDestroy {
+
 
   public mobileQuery: MediaQueryList;
   private poolingSub:Subscription=new Subscription();
@@ -35,12 +38,25 @@ export class DashboardComponent implements OnInit,OnDestroy {
   constructor(private readonly dashboardService:DashboardService,
               private readonly logger:NGXLogger,
               private readonly changeDetectorRef: ChangeDetectorRef,
-              private readonly media: MediaMatcher
+              private readonly media: MediaMatcher,
+              private readonly authService:AuthService,
+              private readonly router:Router
              ) {
     this.mobileQuery = media.matchMedia('(max-width: 600px)');
     this._mobileQueryListener = () => changeDetectorRef.detectChanges();
     this.mobileQuery.addListener(this._mobileQueryListener);
 
+  }
+
+  onLogOutClicked(){
+    this.authService.logOut()
+      .pipe(catchError(err => of(true)))
+      .subscribe(
+        (data)=>{this.logger.debug("data is ",data)},
+        (err)=>{this.logger.error("err is ",err)},()=>{
+        this.logger.trace("completed logout")
+        this.router.navigate(["/login"]);
+      });
   }
 
 

@@ -11,8 +11,7 @@ export class DashboardService {
   private serverState$:Observable<ServerState>;
 
 
-  constructor(private readonly http:HttpClient,
-              private readonly logger:NGXLogger,
+  constructor(private readonly logger:NGXLogger,
               private readonly qbit:QbitService) {
     this.logger.trace(`${DashboardService.name } started`);
     this.serverState$=this.qbit.fetchDataByInterval()

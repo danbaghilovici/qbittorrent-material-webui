@@ -5,7 +5,8 @@ import {DashboardComponent} from "./dashboard/dashboard.component";
 import {AuthGuard} from "./auth/auth.guard";
 
 const routes: Routes = [
-  {path:"",loadChildren:()=>import("./dashboard/dashboard.module").then(m=>m.DashboardModule),canActivate:[AuthGuard],canLoad:[AuthGuard]},
+  {path:"",redirectTo:"dashboard",pathMatch:"full"},
+  {path:"dashboard",loadChildren:()=>import("./dashboard/dashboard.module").then(m=>m.DashboardModule),canActivate:[AuthGuard]},
   {path:"login",component:LoginComponent}
 ];
 

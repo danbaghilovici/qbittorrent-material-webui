@@ -1,4 +1,43 @@
-<p>login works!</p>
-<button (click)="onLoginButtonClicked()">login</button>
-<button (click)="testGetVersion()">version</button>
-<button (click)="onLogoutButtonClicked()">logoiut</button>
+<mat-progress-bar mode="query" *ngIf="loading$|async"></mat-progress-bar>
+<mat-toolbar>
+  <span>Login</span>
+  <button mat-button (click)="onLogOutClicked()">Log out</button>
+</mat-toolbar>
+
+<mat-grid-list cols="1" rowHeight="fit" >
+  <mat-grid-tile rowspan="1" colspan="1">
+
+    <form id="login-form" [formGroup]="loginForm" (ngSubmit)="onFormSubmit()">
+      <p>
+        <mat-form-field appearance="fill" color="primary">
+          <mat-label>Username</mat-label>
+          <input matInput type="text" id="username" formControlName="username">
+          <mat-error *ngIf="isFormFieldInvalid('username')">
+            <span *ngIf="hasFormFieldError('username','required')" >Required</span>
+          </mat-error>
+        </mat-form-field>
+      </p>
+      <p>
+        <mat-form-field appearance="fill" color="primary">
+          <mat-label>Password</mat-label>
+          <input matInput type="password" formControlName="password">
+          <mat-error *ngIf="isFormFieldInvalid('password')">
+            <span *ngIf="hasFormFieldError('password','required')" >Required</span>
+            <span *ngIf="hasFormFieldError('password','minlength')" >
+              Password must have atleast {{this.loginForm.get('password').errors['minlength']['requiredLength']}} characters.
+            </span>
+          </mat-error>
+        </mat-form-field>
+        {{showError('password')}}
+      </p>
+
+
+      <button id="submit-button" type="submit" mat-flat-button [disabled]="!loginForm.valid || (loading$|async)"	color="primary">Log in </button>
+    </form>
+  </mat-grid-tile>
+
+</mat-grid-list>
+
+<mat-toolbar>
+  <span>Footer</span>
+</mat-toolbar>

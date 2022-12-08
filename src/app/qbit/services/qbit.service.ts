@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import {
-  BehaviorSubject,
+  BehaviorSubject, catchError,
   combineLatest,
   concatMap,
   Observable,
@@ -15,34 +15,41 @@ import {
   throwError,
   timer
 } from "rxjs";
-import {FeatureHttpClient} from "./featureHttpClient";
+import {QBitHttpClient} from "./q-bit-http-client.service";
 import {NGXLogger} from "ngx-logger";
 import {HttpResponse} from "@angular/common/http";
 import {IPreferences, IServerStats, ServerStats} from "../models/server-stats.model";
+import {CredentialsModel} from "../../auth/credentials.model";
+import {QbitModule} from "../qbit.module";
 
-@Injectable()
+@Injectable({providedIn:"root"})
 export class QbitService {
 
   // todo
   //  fix RID querying for better perf
 
+  private static readonly QBIT_LOGIN_ENDPOINT:string="api/v2/auth/login";
+  private static readonly QBIT_LOGOUT_ENDPOINT:string="api/v2/auth/logout";
   private static readonly QBIT_VERSION_ENDPOINT:string="api/v2/app/version";
   private static readonly QBIT_MAIN_DATA_ENDPOINT:string="api/v2/sync/maindata";
   private static readonly QBIT_PREFERENCES_ENDPOINT:string="api/v2/app/preferences";
   private static readonly QBIT_ADD_ENDPOINT:string="api/v2/torrents/add"; //post
+
+
   private static RID:number=null;
 
   private preferences:BehaviorSubject<IPreferences> = new BehaviorSubject<IPreferences>(null)
 
   private stopPolling = new Subject();
 
-  constructor(private readonly http:FeatureHttpClient,
+  constructor(private readonly http:QBitHttpClient,
               private readonly logger:NGXLogger) {
+    this.logger.trace("starting")
 
-    this.fetchPreferences().subscribe(data=>{
-      this.logger.debug("constru",data);
-      this.preferences.next(data);
-    });
+    // this.fetchPreferences().subscribe(data=>{
+    //   this.logger.debug("constru",data);
+    //   this.preferences.next(data);
+    // });
 
     // combineLatest([
     //   this.fetchPreferences(),
@@ -53,6 +60,7 @@ export class QbitService {
   }
 
   ngOnDestroy() {
+    this.logger.trace("on destroy")
     this.stopPollingData();
   }
 
@@ -97,10 +105,9 @@ export class QbitService {
 
   public fetchDataByInterval(interval:number=3333):Observable<IServerStats>{
     return timer(0,interval)
-      .pipe(switchMap(
-          ()=>this.fetchServerData()),
-        tap(value => this.logger.trace(value)),
-        retry(0),
+      .pipe(switchMap(()=>this.fetchServerData()),
+        // tap(value => this.logger.trace(value)),
+        retry(3),
         share(),
         takeUntil(this.stopPolling),
         // take(5)
@@ -109,6 +116,43 @@ export class QbitService {
 
   public stopPollingData(){
     this.stopPolling.next(true);
+  }
+
+  public fetchLoginOp(cred:CredentialsModel):Observable<boolean>{
+    const queryString = "username=" + cred.username + "&password=" + cred.password;
+
+    return this.http.post<string>(QbitService.QBIT_LOGIN_ENDPOINT,queryString,{
+      headers:{
+        "Content-type":"application/x-www-form-urlencoded; charset=UTF-8",
+        // "enctype":"multipart/form-data",
+        "Accept":"*/*"
+      },observe:"response"})
+      .pipe(switchMap((response)=>{
+          this.logger.debug(response);
+        if (this.isResponseValid(response) && response.body!=="Fails."){
+          return of(true);
+        }
+
+        return throwError(new Error("Request failed"));
+      }),
+        catchError(err => {return throwError(new Error(err))})
+      );
+  }
+
+  public fetchLogoutOp():Observable<boolean>{
+    return this.http.post<string>(QbitService.QBIT_LOGOUT_ENDPOINT,{},{
+      headers:{
+        "Content-type":"application/x-www-form-urlencoded; charset=UTF-8",
+        // "enctype":"multipart/form-data",
+        // "Accept":"*/*",
+      },observe:"response"})
+      .pipe(switchMap((response)=>{
+        if (this.isResponseValid(response) && response.body!=="Fails."){
+          return of(true);
+        }
+        this.logger.debug(response)
+        return throwError(new Error("Request failed"));
+      }));
   }
 
 

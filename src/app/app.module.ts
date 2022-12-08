@@ -10,6 +10,8 @@ import {AuthService} from "./auth/auth.service";
 import {HttpClientModule} from "@angular/common/http";
 import {CommonModule} from "@angular/common";
 import {LoggerModule, NgxLoggerLevel} from "ngx-logger";
+import {QbitModule} from "./qbit/qbit.module";
+import {MatProgressBarModule} from "@angular/material/progress-bar";
 
 
 @NgModule({
@@ -23,7 +25,9 @@ import {LoggerModule, NgxLoggerLevel} from "ngx-logger";
     LoginModule,
     HttpClientModule,
     CommonModule,
-    LoggerModule.forRoot({ level: NgxLoggerLevel.TRACE })
+    LoggerModule.forRoot({level: NgxLoggerLevel.TRACE}),
+    MatProgressBarModule,
+    QbitModule
   ],
   providers: [AuthGuard,AuthService],
   bootstrap: [AppComponent]
